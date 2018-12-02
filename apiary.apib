@@ -1,0 +1,723 @@
+FORMAT: 1A
+HOST: https://api.smsfire.com.br
+
+# SMSFire - REST API
+
+Bem vindo ao manual das APIs da SMSFire. Com nossas APIs você poderá utilizar todos os serviços dos canais disponíveis tal como obter informações da sua conta.
+
+A API suporta nativamente o formato REST que recebe e devolve dados em objetos JSON.
+
+Todos os parâmetros que devem ser enviados como obrigatórios e opcionais assim como parâmetros dos objetos devolvidos serão descritos ao longo da documentação.
+
+Qualquer dúvida sobre nossos serviços e APIs, fique a vontade para contatar nossa equipe de suporte técnico.
+## Autenticação
+
+Todas as requisições as APIs da SMSFire devem utilizar cabeçalhos Basic Authorization.
+
+Neste campo deve-se informar seus dados de usuário e senha, estes dados são os mesmos que é utilizado para acessar o <a href="https://portal.smsfire.com.br" target="_blank">***Portal SMSFire***</a>.
+
+Caso haja erro na autenticação, o respectivo código de erro será retornado.
+
+<b>Exemplo:</b><br>
+```
+Authorization: Basic Y29udGE6c2VuaGE=
+```
+
+O valor após a palavra Basic é uma chave (hash) em Base64 formados pelos seus dados de usuário e senha. 
+A formação dessa chave pode ser feita em PHP com a função nativa <a href="http://php.net/manual/pt_BR/function.base64-encode.php" target="_blank"><b><i>base64_encode("usuario:senha")</i></b></a> da linguagem.
+<br><br>
+O site <a href="https://www.base64encode.org/" target="_blank">base64Encode</a> também faz essa codificação gratuitamente.
+
+## Parâmetros SMS
+Veja nesta seção todos os parâmetros obrigatórios e opcionais para a utilização da API SMSFire para envios de SMS.
+###to
+O parâmetro **`to`** é utilizado para indicar os destinatários da mensagem.
+| Nome | Tipo | Formato | Limitação | Utilização |
+|------|------|---------|-----------|------------|
+| `to`| *array* | DDI+DDD+Numero | 100 indices | **Obrigatório**
+A sintaxe do número deve sempre ser em formato internacional.
+
+***Exemplo JSON***
+```json
+{
+"to":["5511944556677","5521966778899"]
+}
+```
+<blockquote>
+<p><b>Atenção:</b><br>
+Se houverem mais de 100 índices no array, a API irá retornar o respectivo código erro e nenhuma mensagem será processada
+</p>
+</blockquote>
+###from
+O parâmetro **`from`** é utilizado para indicar o remetente da mensagem.
+| Nome | Tipo | Limitação | Utilização
+|------|------|-----------|------------
+| `from`| *string* | 11 caracteres | **Obrigatório**
+***Exemplo JSON***
+```json
+{
+"from":"SMSFire"
+}
+```
+###text
+O parâmetro **`text`** é utilizado para indicar o texto da mensagem.
+| Nome | Tipo | Limitação | Utilização |
+|------|------|---------|-----------|------------|
+| `text`| *string* | 765 caracteres | **Obrigatório**
+***Exemplo JSON***
+```json
+{
+"to":"Acesse nosso site www.smsfire.com.br"
+}
+```
+####Codificação do texto
+Todas as mensagens recepcionadas serão enviadas em codificação GSM-7 e todo caractere fora desta codificação será substituido pelo seu equivalente simplificado.
+<img src="http://www.smsfire.com.br/public/images/table-set.jpg">
+####Mensagens concatenadas
+O sistema de SMS da SMSFire permite envios de mensagens com até 765 caracteres. Mensagens acima de 160 caracteres, serão divididas em partes iguais de 153 e então cada parte será tarifada individualmente.
+
+Apesar da separação e tarifação individualizada por partes, o destinatário receberá uma mensagem única.
+<blockquote>
+<p><b>Atenção:</b><br>
+Algumas operadoras podem encaminhar a mensagem separada com indicações de paginação.</p>
+</blockquote>
+###campaignName
+O parâmetro **`campaignName`** é utilizado para indicar o nome da campanha do envio.
+Todas os envios, sejam unitários ou em lote farão parte de uma campanha que sempre poderá ser visualizada no <a href="https://portal.smsfire.com.br" target="_blank">***Portal SMSFire***</a>
+| Nome | Tipo | Valor padrão | Limitação | Utilização |
+|------|------|---------|-----------|------------|
+| `campaignName`| *string* | UNNAMED REST API CAMPAIGN | 100 caracteres | *Opcional*
+***Exemplo JSON***
+```json
+{
+"campaignName":"Campanha dia dos pais"
+}
+```
+Se o parâmetro não for especificado, uma campanha nomeada com o **Valor padrão** será criada e ficará a disposição para visualização no ***Portal SMSFire***
+<blockquote>
+<p><b>Atenção:</b><br>
+Campanhas que tenham as mesmas características serão agrupadas numa única campanha. As características utilizadas de checagem para o agrupamento são nome, custo unitário da mensagem, 2ways, flash, rota, tags e a origem de processamento.</p>
+</blockquote>
+
+###tags
+O parâmetro **`tags`** é utilizado para criar etiquetas na campanha do envio. Assim você poderá detalhar melhor os dados da sua campanha e criar melhores filtros.
+| Nome | Tipo | Valor padrão | Limitação | Utilização |
+|------|------|---------|-----------|------------|
+| `tags`| *array* | *empty* | Não há | *Opcional*
+***Exemplo JSON***
+```json
+{
+"tags":["julho","promocao","pais"]
+}
+```
+###schedule 
+O parâmetro **`schedule`** é utilizado para indicar o agendamento de envio de uma mensagem. A não indicação deste parâmetro fará com que a mensagem seja enviada imediatamente.
+| Nome | Tipo | Formato | Limitação | Utilização |
+|------|------|---------|-----------|------------|
+| `schedule`| *string* | YYYY-MM-DD HH:II:SS | Não há | *Opcional*
+***Exemplo JSON***
+```json
+{
+"schedule":"2018-08-22 15:20:00"
+}
+```
+
+Ao indicar este modelo de data, a mensagem será agendada para disparo em 22 de Agosto do ano de 2018 às 15:20PM
+
+<blockquote>
+<p><b>Atenção:</b><br>
+Atualmente nossas APIs não possuem a função de gestão de mensagens agendadas, devido a isto caso seja necessário cancelar um agendamento será necessário entrar em contato com a nossa equipe de suporte através do e-mail <a href="mailto:suporte@smsfire.com.br">suporte@smsfire.com.br</a> com no mínimo 2h de antecedência para podermos cancelar o envio.
+</p>
+</blockquote>
+Para realizar um agendamento de data compátivel com a sua zona horária, consulte o parâmetro `timezone`
+###timezone 
+O parâmetro **`timezone`** é utilizado para indicar a faixa horária do destinatário quando o parâmetro **`schedule`** é indicado.
+| Nome | Tipo | Timezones | Valor padrão | Utilização |
+|------|------|---------|-----------|------------|
+| `timezone`| *string* | <a href="https://secure.php.net/manual/pt_BR/timezones.php" target="_blank">Lista completa</a> | America/Sao_Paulo | *Opcional*
+***Exemplo JSON***
+```json
+{
+"timezone":"Europe/Madrid"
+}
+```
+Ao indicar o parâmetro **`schedule`** para agendar um envio e nenhum timezone for especificado, o sistema irá considerar o mencionado em **Valor padrão**. Se o timezone indicado neste parâmetro for inválido um erro será dado no callback da requisição.
+###2ways
+
+O parâmetro **`2ways`** é utilizado para ativar o recebimento de respostas das mensagens enviadas no <a href="https://portal.smsfire.com.br">Portal SMSFire</a>, e-mail ou numa URL. Caso o parâmetro não seja especificado, todas as respostas enviadas pelos destinatários não serão visualizadas.
+
+Este parâmetro é um array composto por índices que permitem a ativação da função assim como o envio das respostas por e-mail ou url.
+
+***Exemplo JSON***
+```json
+{
+"2ways":{
+    "active":true,
+    "url":"http://www.meusite.com.br",
+    "email":"sms@meusite.com.br"
+    }
+}
+````
+Sabendo destes parâmetros internos do **`2ways`** temos as definições na tabela a seguir
+| Nome | Tipo | Formato | Valor padrão | Utilização |
+|------|:----:|---------|-----------|------------|
+| `2ways` | *array* | - | null | *Opcional*
+| `2ways:active` | *boolean* | true / false | false | ***Obrigatório***
+| `2ways:url` | *string* | URL | null | *Opcional*
+| `2ways:email` | *string* | E-Mail | null | *Opcional*
+####2ways via URL
+Com o parâmetro **`url`** as respostas recebidas serão enviadas no formato ***JSON*** via método ***POST*** ao seu endpoint sem nenhum custo adicional.
+
+***Exemplo de JSON***
+```json
+{
+"mo":{
+    "id": 12345,
+    "text": "Sim, agendar para as 11am",
+    "date":"2018-08-20 15:05:00"
+  },
+"mt":{
+    "id": 54321,
+    "text": "Podemos agendar sua visita para o proximo sabado?",
+    "date":"2018-08-20 14:00:00"
+  },
+"campaign":{
+    "id": 78945,
+    "name": "Agendamento sabado",
+    "date":"2018-08-20 13:58:00"
+  },
+"ddi": 55,
+"mobile": 5511944556677,
+"route": "short"
+}
+```
+Sabendo destes parâmetros enviados ao seu endpoint, temos as definições na tabela a seguir
+| Nome | Tipo  | Descrição
+|------|:-----:| ---------
+| `mo:id` | *int* | *ID* da mensagem recebida
+| `mo:text` | *string* | Texto da resposta
+| `mo:date` | *string* | Data do recebimento da resposta
+| `mt:id` | *int* | *ID* da mensagem de origem
+| `mt:text` | *string* | Texto da mensagem de origem
+| `mt:date` | *string* | Data do envio da mensagem de origem
+| `campaign:id` | *int* | *ID* da campanha da mensagem
+| `campaign:name` | *string* | Nome da campanha da mensagem
+| `campaign:date` | *string* | Data de criação da campanha
+| `ddi` | *string* | *DDI* do número que respondeu a mensagem
+| `mobile` | *string* | Número do usuário que respondeu a mensagem em formato internacional
+| `route` | *string* | Rota utilizada no processamento do envio e do recebimento da resposta
+####2ways via E-mail
+Com o parâmetro **`email`** as respostas recebidas serão enviadas ao e-mail especificado com um custo adicional.
+
+É importante adicionar o dominio ***@smsfire.com.br*** como domínio confiável para que as mensagens não caiam em Lixo Eletrônico / Spam
+<blockquote><p>
+<b>Atenção:</b><br> A ativação da função 2ways irá gerar custo adicional a sua campanha por cada resposta recebida. Envios de respostas via e-mail gerará um custo adicional de 15% do valor da sua tarifa além do custo do recebimento da resposta. Para mais detalhes entre em contato com a equipe de Suporte
+</p></blockquote>
+
+###notificationUrl
+O parâmetro **`notificationUrl`** deve ser indicado para o recebimento do status final da mensagem enviada. Os dados enviados a url mencionada será um objeto ***JSON*** via método ***POST*** de cada mensagem individualmente.
+| Nome | Tipo | Formato | Valor padrão | Utilização |
+|------|------|---------|-----------|------------|
+| `notificationUrl` | *string* | *URL* | *null* | *Opcional*
+***Exemplo JSON***
+```json
+{
+"notificationUrl":"http://www.meusite.com/smsDlr"
+}
+```
+####Requisição a Url
+Uma vez que nossos servidores recebam os dados do gateway/operadora, imediatamente enviaremos o objeto ***JSON*** a url mencionada neste parâmetro.
+
+***Exemplo JSON***
+```json
+﻿{
+    "id": 16232,
+    "to": 5511944556677,
+    "from": "SMSFire",
+    "date": "2018-08-10 17:19:54",
+    "status": {
+        "code": 2,
+        "name": "DELIVERED"
+    },
+    "sub_status": {
+        "code": 1,
+        "name": "OK"
+    },
+    "description": "MESSAGE DELIVERED TO CARRIER"
+}
+```
+Sabendo destes parâmetros enviados ao seu endpoint, temos as definições na tabela a seguir
+| Nome | Tipo  | Descrição
+|------|:-----:| ---------
+| `id` | *int* | *ID* da mensagem enviada
+| `to` | *int* | Número do destinatário em formato internacional
+| `from` | *string* | Remetente utilizado no envio
+| `date` | *string* | *ID* Data do status recebido
+| `status` | *array* | Detalhe com código e nome do status
+| `status:code` | *int* | Código do status da mensagem
+| `status:name` | *string* | Nome do código de status da mensagem
+| `sub_status` | *array* | Detalhe com código e nome do status complementar
+| `sub_status:code` | *int* | Código do status complementar da mensagem
+| `sub_status:name` | *string* | Nome do código de status complementar da mensagem
+| `description` | *string* | Descrição complementar do status da mensagem
+Para consultar os possíveis **`status`**, **`sub_status`** e **`description`** acesse a seção ***Tabela de status***
+
+###routing
+O parâmetro **`routing`** é utilizado para indicar por qual rota de envio a campanha deverá ser processada.
+
+| Nome | Tipo | Formato | Valor padrão | Utilização |
+|------|:----:|:-------:|:---------:|------------|
+| `routing` | *int* | 1 / 0 | 1 | *Opcional*
+
+| Valor | Rota        
+|------:|-----
+| 1     | *shortcode* 
+| 0     | *longcode*  
+***Exemplo JSON***
+```json
+{
+"routing":1
+}
+```
+Ao indicar o parâmetro **`routing`** a API irá processar o envio a partir da rota escolhida, caso não seja mencionado o sistema irá considerar o **Valor padrão**. Se o routing indicado neste parâmetro for inválido um erro será dado no callback da requisição.
+####Características de rotas
+Avalise sempre qual a melhor rota para o seu tipo de utilização. Cada rota possui características que podem afetar diretamente a efetividade da sua campanha.
+#####Rotas longcode
+Rotas de baixo custo que podem utilizar tecnologias alternativas para processamento das mensagens até as operadoras, porém possuem maior tempo de demora para o recebimento da mensagem, efetividade de entrega intermitente e baixo custo.
++ Características longcode
+    + Demora para entrega da mensagem (até 4 horas)
+    + Remetente variável entre número curto e longo
+    + Sem garantias no funcionamento dos MOs (2ways)
+    + Baixo custo
+    + Efetividade intermitente
+    + Status final do tipo SMSC (confirmação de entrega da mensagem até a operadora)
+    + Capacidade de processamento diário limitada
+
+<blockquote>
+<p><b>Atenção:</b><br>
+Algumas rotas longcode que utilizamos não fornecem os dados de status final e nestes casos todas as mensagens receberão automaticamente o status inicial como DELIVERED
+</p>
+</blockquote>
+
+#####Rotas shortcode
+Rotas de conexão direta ou via brokers homologados pelas operadoras que possuem excelente qualidade com tempo de demora de entrega reduzido e efetividade de entrega constante.
++ Características shortcode
+    + Processamento prioritário para entrega imediata da mensagem
+    + Remetente com número de 5 dígitos fixo
+    + MOs (2ways)
+    + Alta efetividade de entrega
+    + Status final do tipo Handset (confirmação de recebimento no dispositivo)
+    + Capacidade de processamento diário ilimitada
+ 
+##Tabela de erros
+Todos os códigos de erros são compostos pela matriz **`error`** formatados num objeto ***JSON***.
+Na tabela abaixo estão listados todos os códigos, descrições e ações que devem ser realizadas para cada situação.
+| Code   | Description                                             | Http Response | Ação
+|:------:|---------------------------------------------------------|:-------------:|------
+| 101    | Username unknown                                        | 401           | Verifique o nome de usuário.
+| 102    | Invalid password                                        | 401           | Senha informada é incorreta.
+| 103    | Username Blocked                                        | 403           | Usuário bloqueado. Contate o suporte.
+| 104    | Invalid endpoint                                        | 404           | Endpoint consumido não existe.
+| 105    | Method not allowed                                      | 405           | Método de envio de dados não permitido.
+| 106    | Content type not allowed                                | 406           | Modifique o *Content-type* do cabeçalho para o formato permitido.
+| 107    | Parameter TO is required                                | 400           | O parâmetro `to` é obrigatório e não foi mencionado.
+| 108    | Parameter TO invalid                                    | 400           | O parâmetro `to` deve ser um array.
+| 109    | Parameter TO do not accept more than 100 items          | 400           | O parâmetro `to` não pode conter mais que 100 indices.
+| 110    | Parameter FROM is required                              | 400           | O parâmetro `from` é obrigatório e não foi mencionado.
+| 111    | Parameter FROM too long.                                | 400           | O parâmetro `from` não pode contar mais que 11 caracteres.
+| 112    | Parameter TEXT is required                              | 400           | O parâmetro `text` é obrigatório e não foi mencionado.
+| 113    | Parameter TEXT is too long                              | 400           | O parâmetro `text` não pode conter mais que 765 caracteres.
+| 114    | Parameter SCHEDULE invalid                              | 400           | O parâmetro `schedule` foi fornecido com data passada ou em formato inválido.
+| 115    | Parameter TIMEZONE invalid                              | 400           | O timezone informado não existe. Campo *case-sensitivity*
+| <strike>116</strike> | <strike>Parameter FLASH invalid</strike>  | <strike>400</strike> | <strike>O parâmetro `flash`não teve seu valor indicado como *boolean* </strike>
+| 117    | Parameter 2WAYS > Active invalid                        | 400           | O parâmetro `active` da chave `2ways` não teve seu valor indicado como *boolean*
+| 118    | Could not define URL or EMAIL data with ACTIVE as false | 400           | Defina o parâmetro `active` como *true* da chave `2ways` para poder indicar valores nos parâmetros `url` e/ou `email`
+| 119    | Parameter 2WAYS > Email invalid                         | 400           | Informe um e-mail válido no parâmetro `email` da chave `2ways`.
+| 120    | Parameter 2WAYS > Url invalid                           | 400           | Informe uma url válida no parâmetro `url` da chave `2ways`.
+| 121    | Parameter CAMPAIGNNAME too long                         | 400           | O parâmetro `campaignName` não pode conter mais que 100 caracteres.
+| 122    | Parameter TAGS invalid                                  | 400           | O parâmetro `tags`deve ser um array.
+| 123    | Parameter ROUTING invalid                               | 400           | O parâmetro `routing` não teve seu valor indicado como *integer*.
+| 124    | Parameter NOTIFICATIONURL invalid                       | 400           | Informe uma url válida no parâmetro `notificationUrl`.
+| 125    | You are not allowed to reach the destination            | 205           | Sua conta não pode enviar mensagem ao país especificado. Contate o suporte.
+| 126    | It is forbidden send multi country campaign             | 400           | Crie campanhas distintas para cada país.
+| 127    | Parameter ID invalid                                    | 400           | O `id` deve conter apenas números.
+| 401    | Login were canceled                                     | 401           | A validação do usuário e senha foi cancelada.
+| 1xxx   | Database Error                                          | 500           | Falha no servidor. Contate o suporte com o código retornado.
+Sabendo dos possíveis códigos de erro que a API pode retornar, veja abaixo um exemplo do objeto *JSON*
+
+***Exemplo JSON***
+```json
+{
+"error":{
+    "code":121,
+    "description":"Parameter CAMPAIGNNAME too long. Maximum 100 characters."
+    }
+}
+```
+<blockquote>
+<p><b>Atenção:</b><br>
+Quando a API retorna erro, nenhum envio é processado
+</p>
+</blockquote>
+##Tabela de status
+As mensagens enviadas a partir da API da SMSFire possuem status inicial e final.
+O status inicial é dado como callback da requisição que pode ser única ou múltipla e o status final é dado para cada envio individualmente.
+
+Todos os dados do status inicial e final fazem parte de um objeto ***JSON***. Os dados do status final são enviados via método ***POST*** a uma url que pode ser fornecida no momento da requisição através do parâmetro **`notificationUrl`**.
+
+Quando o envio é processado corretamente a API devolve o código HTTP de acordo com o tipo de requisição
+| Http Code | Nome           | Descrição
+|:---------:|----------------|------------
+| 202       | *Accepted*     | Retorno dado para envios individuais
+| 207       | *Multi-status* | Retorno dado para envios múltiplos
+
+###Status inicial
+O status inicial será dado nos detalhes do parâmetro **`status`** que compõe o *array* **`sms`** como callback da requisição como objeto ***JSON***. Este callback somente será fornecido se a requisição ocorrer sem nenhum erro.
+
+Veja abaixo os possíveis retornos que a API pode gerar neste momento.
+
+| Code | Name      | Detail                              | Significado
+|:----:|-----------|-------------------------------------|------------
+| 1    | ACCEPTED  | Data accepted by the carrier        | Envio processado corretamente até o gateway/operadora
+| 2    | DELIVERED | Data delivered to carrier           | Envio entregue a operadora. Este código somente será fornecido neste estágio em rota longcode
+| 6    | SCHEDULED | Data scheduled at the carrier       | Envio programado corretamente até o gateway/operadora
+| 7    | ERROR     | Not enough credits                  | Saldo indisponível. Envio não processado até o gateway/operadora.
+| 7    | ERROR     | User do not have gateway assigned   | Login sem roteamento. Contate o suporte
+Deste modo temos os seguintes detalhes de cada parâmetro
+| Nome    | Tipo 
+|--------:|:----
+| `code`  | *int*
+| `name`  | *string*
+| `detail`| *string* 
+Abaixo temos o seguinte objeto ***JSON*** completo do callback bem sucedido.
+
+***Exemplo JSON***
+```json
+"sms": [
+    {
+    "id": 16237,
+    "to": 5511944556677,
+    "from": "SMSFire",
+    "text": "Envio de sms bem sucedido",
+    "parts": 1,
+    "date": "2018-08-13 19:07:56",
+    "status": {
+        "code": 1,
+        "name": "ACCEPTED",
+        "detail": "DATA ACCEPTED BY THE CARRIER"
+        }
+    }
+]
+```
+###Status final
+O status final será dado nos detalhes do parâmetro **`status`** e **`sub_status`** como objeto ***JSON*** enviado no método ***POST*** a url indicada no parâmetro **`notificationUrl`**. 
+
+Este objeto será encaminhado assim que o gateway/operadora encaminhar aos nossos servidores a resposta final do seu envio.
+
+Este objeto sempre será individual para cada envio, diferentemente do objeto fornecido no status inicial.
+
+Veja abaixo os possíveis códigos e detalhes que a API poderá encaminhar ao seu endpoint neste momento.
+
+#####Status
+| Code | Name        | Significado 
+|:----:|-------------|------------
+| 2    | DELIVERED   | Mensagem recebida na operadora/dispositivo 
+| 3    | UNDELIVERED | Mensagem não entregue. Número inválido ou bloqueado
+| 4    | REJECTED    | Mensagem não entregue. Envio rejeitado pelo gateway/operadora
+
+####Sub_status
+Este parâmetro terá determinados resultados baseado no parâmetro **`status`**
+Veja abaixo os possíveis códigos de **`sub_status`** em combinação com o **`status`**
+| Status code | Sub_status code | Name 
+|:-----------:|:---------------:|------
+| 2           | 1               | OK
+| 3           | 1               | INVALID
+| 4           | 1               | BLOCKED
+| 7           | 1               | WITHOUT CREDITS
+| 7           | 2               | GATEWAY ERROR
+| 7           | 3               | WITHOUT ASSIGNED GATEWAY
+
+Deste modo temos os seguintes detalhes de cada parâmetro
+| Nome    | Tipo 
+|--------:|:-----
+| `code`  | *int*
+| `name`  | *string*
+
+Abaixo temos o seguinte objeto ***JSON*** completo que será enviado ao endpoint.
+
+***Exemplo JSON***
+```json
+﻿{
+    "id": 16232,
+    "to": 5511944556677,
+    "from": "SMSFire",
+    "date": "2018-08-10 17:19:54",
+    "status": {
+        "code": 2,
+        "name": "DELIVERED"
+    },
+    "sub_status": {
+        "code": 1,
+        "name": "OK"
+    },
+    "description": "MESSAGE DELIVERED TO CARRIER"
+}
+```
+
+#Group Serviços da API SMS
+
+##Envio de SMS [/v1/sms/send]
+**Endpoint:** `https://api.smsfire.com.br/v1/sms/send`
+
+###Testar envio de SMS [POST]
+
+
+Este serviço permite o envio de SMS para um ou mais destinatários de forma imediata ou agendada com base no fuso horário do destinatário.
+
+***Exemplo JSON simplificado***
+```json
+{
+    "to":["5511944556677","5511977889900],
+    "from":"30125",
+    "text":"Activation code: 20181907"
+}
+```
+***Exemplo JSON completo***
+```json
+    {
+        "to":["5511944556677","5511977889900"],
+        "from":"30125",
+        "text":"Activation code: 20181907",
+        "compaignName": "Dia dos pais",
+        "tags":["promocao","desconto"],
+        "schedule":"2018-08-12 10:00:00",
+        "timezone":"America/Sao_Paulo",
+        "2ways":{
+            "active":true,
+            "url":"http://www.meusite.com.br/moDlr",
+            "email":"mo@meusite.com.br"
+            },
+        "notificationUrl":"http://www.meusite.com.br/mtDlr",
+        "routing":1
+    }
+```
+
+Logo que a requisição for bem sucedida, sem erros, nós teremos a resposta HTTP *202 - Accepted* para envios individuais ou *207 - Multi-Status* para envios múltiplos com o seguinte objeto ***JSON*** como resposta
+
+***Callback JSON da requisição***
+
+```json
+{
+"campaign": {
+    "id": 163,
+    "name": "Dia dos pais",
+    "tags": ["promocao","desconto"],
+    "cost": 0.08,
+    "volume": 2,
+    "currency": "BRL",
+    "routing": "short"
+},
+"sms": [
+        {
+        "id": 16237,
+        "to": 5511944556677,
+        "from": "30125",
+        "text": "Activation code: 20181907",
+        "parts": 1,
+        "date": "2018-08-12 10:00:00",
+        "status": {
+            "code": 6,
+            "name": "SCHEDULED",
+            "detail": "DATA SCHEDULED AT THE CARRIER"
+            }
+        },
+        {
+        "id": 16238,
+        "to": 5511977889900,
+        "from": "30125",
+        "text": "Activation code: 20181907",
+        "parts": 1,
+        "date": "2018-08-12 10:00:00",
+        "status": {
+            "code": 7,
+            "name": "ERROR",
+            "detail": "NOT ENOUGH CREDITS"
+            }
+        }
+    ]
+}
+```
+Sabendo do objeto ***JSON*** recebido no callback, a tabela abaixo detalha os valores de cada um dos parâmetros.
+####Indice `campaign`
+| Nome     | Tipo     | Descrição
+|----------|:--------:|-----------
+|`id`      | *int*    | *ID* da campanha criada
+|`name`    | *string* | Nome da campanha criada
+|`tags`    | *array*  | Etiquetas da campanha
+|`cost`    | *float*  | Custo unitário da mensagem
+|`volume`  | *int*    | Total de mensagens vinculadas a campanha
+|`currency`| *string* | Sigla da moeda utilizada na tarifação
+|`routing` | *string* | Rota utilizada no envio das mensagens
+
+####Indice `sms`
+| Nome          | Tipo     | Descrição
+|---------------|:--------:|-----------
+|`id`           | *int*    | *ID* da mensagem enviada
+|`to`           | *int*    | Número do destinatário em formato internacional
+|`from`         | *string* | Remetente utilizado na mensagem
+|`text`         | *string* | Texto utilizado na mensagem
+|`parts`        | *int*    | Indicador do total de partes da mensagem
+|`date`         | *string* | Data do envio da mensagem em formato YYYY-MM-DD HH:II:SS
+|`status:code`  | *int*    | Código de status inicial da mensagem
+|`status:name`  | *string* | Nome do status inicial da mensagem
+|`status:detail`| *int*    | Detalhe do status inicial da mensagem
+
++ Attributes
+    + to: 5511944556677,5511977889900 (array, required) - Número do destinatário, formato internacional.
+    + from: 30125 (string, required) - Nome do remetente.
+    + text: Activation code: 20181907 (string, required) - Texto da mensagem a ser enviada.
+    + campaignName: Dia dos pais (string, optional) - Nome da campanha
+    + tags: promocao,desconto (array, optional) - Etiquetas da campanha
+    + schedule: `2018-08-12 10:00:00` (string, optional) - Data de agendamento
+    + timezone: America/Sao_Paulo (string, optional) - Faixa horária do destinatário
+    + 2ways/active: true (boolean, optional) - Ativação do recebimento de respostas
+    + 2ways/url: http://www.meusite.com.br/moDlr (string, optional) - Url para o direcionamento da resposta
+    + 2ways/email: mo@meusite.com.br (string, optional) - E-mail onde serão direcionados o MO *Custo adicional
+    + notificationUrl: http://www.meusite.com.br/mtDlr (string, optional) - Url onde serão direcionados os status finais
+    + routing: 1 (number, optional) - Definição da rota de processamento da mensagem
+    
++ request (application/json)
+    + Header
+    
+            Authorization: Basic YWRtaW46YWRtaW4=
+    
+    + Body
+    
+            {
+            "to":["5511944556677","5511977889900"],
+            "from":"SMSFIRE",
+            "text":"Activation code: 20181907",
+            "compaignName": "Dia dos pais",
+            "tags":["promocao","desconto"],
+            "schedule":"2018-08-12 10:00:00",
+            "timezone":"America/Sao_Paulo",
+            "2ways":{
+                "active":true,
+                "url":"http://www.meusite.com.br/moDlr",
+                "email":"mo@meusite.com.br"
+            },
+            "notificationUrl":"http://www.meusite.com.br/mtDlr",
+            "routing":1
+            }
+
++ Response 207 (application/json)
+
+        {
+        "campaign": {
+            "id": 163,
+            "name": "Dia dos pais",
+            "tags": ["promocao","desconto"],
+            "cost": 0.08,
+            "volume": 2,
+            "currency": "BRL",
+            "routing": "short"
+        },
+        "sms": [
+            {
+            "id": 16237,
+            "to": 5511944556677,
+            "from": "SMSFIRE",
+            "text": "Activation code: 20181907",
+            "parts": 1,
+            "date": "2018-08-12 10:00:00",
+            "status": {
+                "code": 6,
+                "name": "SCHEDULED",
+                "detail": "DATA SCHEDULED AT THE CARRIER"
+                }
+            },
+            {
+            "id": 16238,
+            "to": 5511977889900,
+            "from": "SMSFIRE",
+            "text": "Activation code: 20181907",
+            "parts": 1,
+            "date": "2018-08-13 19:07:56",
+            "status": {
+                "code": 7,
+                "name": "ERROR",
+                "detail": "NOT ENOUGH CREDITS"
+                }
+            }
+        ]
+        }
+
+    
+##Consultar status [/v1/sms/status/{id}]
+**Endpoint:** `https://api.smsfire.com.br/v1/sms/status/{id}`
+
+###Testar consulta de status [GET]
+
+Este serviço permite a consulta do status final de um determinado SMS enviado. 
+
+A consulta dá-se pelo parâmetro `id` da mensagem e o resultado será dado num objeto ***JSON***.
+
+Caso o `id` consultado não exista, o objeto retornado terá seus valores como *null*
+
+***Exemplo JSON retornado***
+```json
+﻿{
+    "id": 16232,
+    "to": 5511944556677,
+    "from": "SMSFire",
+    "date": "2018-08-10 17:19:54",
+    "status": {
+        "code": 2,
+        "name": "DELIVERED"
+    },
+    "sub_status": {
+        "code": 1,
+        "name": "OK"
+    },
+    "description": "MESSAGE DELIVERED TO CARRIER"
+}
+```
+<blockquote>
+<p>Consulte a seção <u><i>Tabela de status</i></u> para identificar o que cada código representa.</p>
+</blockquote>
+
++ parameters
+    + id: 16232 (number, required) - Identificado da mensagem fornecido nos envios
+
+
++ request
+    + Header
+    
+            Authorization: Basic YWRtaW46YWRtaW4=
+
++ response 200 (application/json)
+
+        ﻿{
+            "id": 16232,
+            "to": 5511944556677,
+            "from": "SMSFire",
+            "date": "2018-08-10 17:19:54",
+            "status": {
+                "code": 2,
+                "name": "DELIVERED"
+            },
+            "sub_status": {
+                "code": 1,
+                "name": "OK"
+            },
+            "description": "MESSAGE DELIVERED TO CARRIER"
+        }
+
+#Group Suporte técnico
+A todos os nossos clientes oferecemos suporte técnico em horário comercial das 9:00h as 18:00h de segunda a sexta.
+
+Qualquer dúvida ou sugestão referente as nossas APIs envie um e-mail para <a href="mailto:suporte@smsfire.com.br">suporte@smsfire.com.br</a>
+
+Com o seu feedback, poderemos manter em constante aperfeiçoamento de nossas tecnologias e disponibilizar ferramentas que facilitem o seu dia a dia.
+
+<h3>Equipe SMSFire</h3>

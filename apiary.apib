@@ -308,6 +308,25 @@ Rotas de conexão direta ou via brokers homologados pelas operadoras que possuem
     + Alta efetividade de entrega
     + Status final do tipo Handset (confirmação de recebimento no dispositivo)
     + Capacidade de processamento diário ilimitada
+    
+###flash
+O parâmetro **`flash`** é utilizado para indicar a classe da mensagem, ou seja, se a mensagem será entregue como um SMS comum ou um SMS "popup"
+
+| Nome | Tipo | Formato | Valor padrão | Utilização |
+|------|:----:|:-------:|:---------:|------------|
+| `flash` | *boolean* | true / false | false | *Opcional*
+
+<blockquote>
+<p><b>Atenção:</b><br>
+Este parâmetro apenas tem efeito em envios de mensagem pela rota Shortcode.
+</p>
+</blockquote> 
+***Exemplo JSON***
+```json
+{
+"flash":true
+}
+```
  
 ##Tabela de erros
 Todos os códigos de erros são compostos pela matriz **`error`** formatados num objeto ***JSON***.
@@ -359,8 +378,6 @@ Sabendo dos possíveis códigos de erro que a API pode retornar, veja abaixo um 
 Quando a API retorna erro, nenhum envio é processado
 </p>
 </blockquote>
-###flash
-O parâmetro **`flash`** é utilizado para indicar a classe da mensagem, ou seja, se a mensagem será entregue como um SMS comum ou um SMS "popup"
 
 ##Tabela de status
 As mensagens enviadas a partir da API da SMSFire possuem status inicial e final.

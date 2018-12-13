@@ -313,21 +313,20 @@ Rotas de conexão direta ou via brokers homologados pelas operadoras que possuem
 O parâmetro **`flash`** é utilizado para indicar a classe da mensagem, ou seja, se a mensagem será entregue como um SMS comum ou um SMS "popup"
 
 | Nome | Tipo | Formato | Valor padrão | Utilização |
-|------|:----:|:-------:|:---------:|------------|
+|:----:|:----:|:-------:|:---------:|------------|
 | `flash` | *boolean* | true / false | false | *Opcional*
 
-<blockquote>
-<p><b>Atenção:</b><br>
-Este parâmetro apenas tem efeito em envios de mensagem pela rota Shortcode.
-</p>
-</blockquote> 
 ***Exemplo JSON***
 ```json
 {
 "flash":true
 }
 ```
- 
+<blockquote>
+<p><b>Atenção:</b><br>
+Este parâmetro apenas tem efeito em envios de mensagem pela rota Shortcode.
+</p>
+</blockquote> 
 ##Tabela de erros
 Todos os códigos de erros são compostos pela matriz **`error`** formatados num objeto ***JSON***.
 Na tabela abaixo estão listados todos os códigos, descrições e ações que devem ser realizadas para cada situação.

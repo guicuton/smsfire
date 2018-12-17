@@ -324,7 +324,7 @@ O parâmetro **`flash`** é utilizado para indicar a classe da mensagem, ou seja
 ```
 <blockquote>
 <p><b>Atenção:</b><br>
-Este parâmetro apenas tem efeito em envios de mensagem pela rota Shortcode.
+Este parâmetro apenas tem efeito em envios de mensagens pela rota Shortcode.
 </p>
 </blockquote> 
 ##Tabela de erros
@@ -730,6 +730,46 @@ Caso o `id` consultado não exista, o objeto retornado terá seus valores como *
                 "name": "OK"
             },
             "description": "MESSAGE DELIVERED TO CARRIER"
+        }
+        
+##Consultar saldo [/v1/balance]
+**Endpoint:** `https://api.smsfire.com.br/v1/balance`
+
+###Testar consulta de status [GET]
+
+Este serviço permite a consulta do saldo atualizado da sua conta indicando valor, moeda e limite de crédito caso sua conta esteja no regime pós-pago. 
+
+A consulta dá-se mediante uma requisição GET a partir da autenticação do seu usuário e os dados são retornados num objeto em formato ***JSON***. Abaixo temos seus detalhes
+
+| Nome | Tipo | Formato |
+|------|------|---------|
+| `balance`| *float* | 9999.00 |
+| `negative_limit`| *float* | -9999.00 |
+| `currency`| *string* |  BRL,EUR,USD,MXN ou COP |
+
+***Exemplo JSON retornado***
+```json
+{
+  "balance": 1125.91,
+  "negative_limit": 0,
+  "currency": "BRL"
+}
+```
+<blockquote>
+<p>Consulte a seção <u><i>Autenticação</i></u> para ter detalhes de como autenticar a sua requisição</p>
+</blockquote>
+
++ requestce
+    + Header
+    
+            Authorization: Basic YWRtaW46YWRtaW4=
+
++ response 200 (application/json)
+        
+        {
+          "balance": 1500.00,
+          "negative_limit": 0,
+          "currency": "BRL"
         }
 
 #Group Suporte técnico

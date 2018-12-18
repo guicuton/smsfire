@@ -484,7 +484,7 @@ Abaixo temos o seguinte objeto ***JSON*** completo que será enviado ao endpoint
 ```
 
 #Group Serviços da API SMS
-
+A partir deste módulo, você será capaz de utilizar todas as funcionalidades dos nossos serviços de SMS via API.
 ##Envio de SMS [/v1/sms/send]
 **Endpoint:** `https://api.smsfire.com.br/v1/sms/send`
 
@@ -731,11 +731,13 @@ Caso o `id` consultado não exista, o objeto retornado terá seus valores como *
             },
             "description": "MESSAGE DELIVERED TO CARRIER"
         }
-        
-##Consultar saldo [/v1/balance]
-**Endpoint:** `https://api.smsfire.com.br/v1/balance`
+    
+#Group Serviços da API ACCOUNT
+A partir deste módulo, você poderá consultar via API todos os dados da conta como saldo, tarifas, países configurados entre outras informações.
+##Consultar saldo [/v1/account/balance]
+**Endpoint:** `https://api.smsfire.com.br/v1/account/balance`
 
-###Testar consulta de status [GET]
+###Testar consulta de saldo [GET]
 
 Este serviço permite a consulta do saldo atualizado da sua conta indicando valor, moeda e limite de crédito caso sua conta esteja no regime pós-pago. 
 
@@ -759,7 +761,7 @@ A consulta dá-se mediante uma requisição GET a partir da autenticação do se
 <p>Consulte a seção <u><i>Autenticação</i></u> para ter detalhes de como autenticar a sua requisição</p>
 </blockquote>
 
-+ requestce
++ request
     + Header
     
             Authorization: Basic YWRtaW46YWRtaW4=
@@ -775,7 +777,7 @@ A consulta dá-se mediante uma requisição GET a partir da autenticação do se
 #Group Suporte técnico
 A todos os nossos clientes oferecemos suporte técnico em horário comercial das 9:00h as 18:00h de segunda a sexta.
 
-Qualquer dúvida ou sugestão referente as nossas APIs envie um e-mail para <a href="mailto:suporte@smsfire.com.br">suporte@smsfire.com.br</a>
+Qualquer dúvida ou sugestão referente as nossas APIs envie um e-mail para <a href="mailto:suporte@smsfire.com.br">suporte@smsfire.com.br</a> ou entre em contato via Skype pelo mesmo e-mail ou Whatsapp pelo número +55 11 9691574863
 
 Com o seu feedback, poderemos manter em constante aperfeiçoamento de nossas tecnologias e disponibilizar ferramentas que facilitem o seu dia a dia.
 

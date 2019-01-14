@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: https://api.smsfire.com.br
+HOST: http://api.smsfire.com.br
 
 # SMSFire - REST API
 
@@ -13,8 +13,8 @@ Qualquer dúvida sobre nossos serviços e APIs, fique a vontade para contatar no
 ## Autenticação
 
 Todas as requisições as APIs da SMSFire devem utilizar cabeçalhos Basic Authorization.
-
-Neste campo deve-se informar seus dados de usuário e senha, estes dados são os mesmos que é utilizado para acessar o <a href="https://portal.smsfire.com.br" target="_blank">***Portal SMSFire***</a>.
+Our 
+Neste campo deve-se informar seus dados de usuário e senha, estes dados são os mesmos que é utilizado para acessar o <a href="http://portal.smsfire.com.br" target="_blank">***Portal SMSFire***</a>.
 
 Caso haja erro na autenticação, o respectivo código de erro será retornado.
 
@@ -34,7 +34,7 @@ Veja nesta seção todos os parâmetros obrigatórios e opcionais para a utiliza
 O parâmetro **`to`** é utilizado para indicar os destinatários da mensagem.
 | Nome | Tipo | Formato | Limitação | Utilização |
 |------|------|---------|-----------|------------|
-| `to`| *array* | DDI+DDD+Numero | 100 indices | **Obrigatório**
+| `to`| *array* | DDI+DDD+Numero | 200 indices | **Obrigatório**
 A sintaxe do número deve sempre ser em formato internacional.
 
 ***Exemplo JSON***
@@ -45,7 +45,7 @@ A sintaxe do número deve sempre ser em formato internacional.
 ```
 <blockquote>
 <p><b>Atenção:</b><br>
-Se houverem mais de 100 índices no array, a API irá retornar o respectivo código erro e nenhuma mensagem será processada
+Se houverem mais de 200 índices no array, a API irá retornar o respectivo código erro e nenhuma mensagem será processada
 </p>
 </blockquote>
 ###from
@@ -83,7 +83,7 @@ Algumas operadoras podem encaminhar a mensagem separada com indicações de pagi
 </blockquote>
 ###campaignName
 O parâmetro **`campaignName`** é utilizado para indicar o nome da campanha do envio.
-Todas os envios, sejam unitários ou em lote farão parte de uma campanha que sempre poderá ser visualizada no <a href="https://portal.smsfire.com.br" target="_blank">***Portal SMSFire***</a>
+Todas os envios, sejam unitários ou em lote farão parte de uma campanha que sempre poderá ser visualizada no <a href="http://portal.smsfire.com.br" target="_blank">***Portal SMSFire***</a>
 | Nome | Tipo | Valor padrão | Limitação | Utilização |
 |------|------|---------|-----------|------------|
 | `campaignName`| *string* | UNNAMED REST API CAMPAIGN | 100 caracteres | *Opcional*
@@ -144,7 +144,7 @@ O parâmetro **`timezone`** é utilizado para indicar a faixa horária do destin
 Ao indicar o parâmetro **`schedule`** para agendar um envio e nenhum timezone for especificado, o sistema irá considerar o mencionado em **Valor padrão**. Se o timezone indicado neste parâmetro for inválido um erro será dado no callback da requisição.
 ###2ways
 
-O parâmetro **`2ways`** é utilizado para ativar o recebimento de respostas das mensagens enviadas no <a href="https://portal.smsfire.com.br">Portal SMSFire</a>, e-mail ou numa URL. Caso o parâmetro não seja especificado, todas as respostas enviadas pelos destinatários não serão visualizadas.
+O parâmetro **`2ways`** é utilizado para ativar o recebimento de respostas das mensagens enviadas no <a href="http://portal.smsfire.com.br">Portal SMSFire</a>, e-mail ou numa URL. Caso o parâmetro não seja especificado, todas as respostas enviadas pelos destinatários não serão visualizadas.
 
 Este parâmetro é um array composto por índices que permitem a ativação da função assim como o envio das respostas por e-mail ou url.
 
@@ -340,7 +340,7 @@ Na tabela abaixo estão listados todos os códigos, descrições e ações que d
 | 106    | Content type not allowed                                | 406           | Modifique o *Content-type* do cabeçalho para o formato permitido.
 | 107    | Parameter TO is required                                | 400           | O parâmetro `to` é obrigatório e não foi mencionado.
 | 108    | Parameter TO invalid                                    | 400           | O parâmetro `to` deve ser um array.
-| 109    | Parameter TO do not accept more than 100 items          | 400           | O parâmetro `to` não pode conter mais que 100 indices.
+| 109    | Parameter TO do not accept more than 200 items          | 400           | O parâmetro `to` não pode conter mais que 200 indices.
 | 110    | Parameter FROM is required                              | 400           | O parâmetro `from` é obrigatório e não foi mencionado.
 | 111    | Parameter FROM too long.                                | 400           | O parâmetro `from` não pode contar mais que 11 caracteres.
 | 112    | Parameter TEXT is required                              | 400           | O parâmetro `text` é obrigatório e não foi mencionado.
@@ -486,7 +486,7 @@ Abaixo temos o seguinte objeto ***JSON*** completo que será enviado ao endpoint
 #Group Serviços da API SMS
 A partir deste módulo, você será capaz de utilizar todas as funcionalidades dos nossos serviços de SMS via API.
 ##Envio de SMS [/v1/sms/send]
-**Endpoint:** `https://api.smsfire.com.br/v1/sms/send`
+**Endpoint:** `http://api.smsfire.com.br/v1/sms/send`
 
 ###Testar envio de SMS [POST]
 
@@ -673,7 +673,7 @@ Sabendo do objeto ***JSON*** recebido no callback, a tabela abaixo detalha os va
 
     
 ##Consultar status [/v1/sms/status/{id}]
-**Endpoint:** `https://api.smsfire.com.br/v1/sms/status/{id}`
+**Endpoint:** `http://api.smsfire.com.br/v1/sms/status/{id}`
 
 ###Testar consulta de status [GET]
 
@@ -735,7 +735,7 @@ Caso o `id` consultado não exista, o objeto retornado terá seus valores como *
 #Group Serviços da API ACCOUNT
 A partir deste módulo, você poderá consultar via API todos os dados da conta como saldo, tarifas, países configurados entre outras informações.
 ##Consultar saldo [/v1/account/balance]
-**Endpoint:** `https://api.smsfire.com.br/v1/account/balance`
+**Endpoint:** `http://api.smsfire.com.br/v1/account/balance`
 
 ###Testar consulta de saldo [GET]
 

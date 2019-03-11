@@ -10,10 +10,9 @@ A API suporta nativamente o formato REST que recebe e devolve dados em objetos J
 Todos os parâmetros que devem ser enviados como obrigatórios e opcionais assim como parâmetros dos objetos devolvidos serão descritos ao longo da documentação.
 
 Qualquer dúvida sobre nossos serviços e APIs, fique a vontade para contatar nossa equipe de suporte técnico.
-## Autenticação
+# Autenticação
 
 Todas as requisições as APIs da SMSFire devem utilizar cabeçalhos Basic Authorization.
-Our 
 Neste campo deve-se informar seus dados de usuário e senha, estes dados são os mesmos que é utilizado para acessar o <a href="http://portal.smsfire.com.br" target="_blank">***Portal SMSFire***</a>.
 
 Caso haja erro na autenticação, o respectivo código de erro será retornado.
@@ -28,9 +27,9 @@ A formação dessa chave pode ser feita em PHP com a função nativa <a href="ht
 <br><br>
 O site <a href="https://www.base64encode.org/" target="_blank">base64Encode</a> também faz essa codificação gratuitamente.
 
-## Parâmetros SMS
+# Parâmetros SMS
 Veja nesta seção todos os parâmetros obrigatórios e opcionais para a utilização da API SMSFire para envios de SMS.
-###to
+##to
 O parâmetro **`to`** é utilizado para indicar os destinatários da mensagem.
 | Nome | Tipo | Formato | Limitação | Utilização |
 |------|------|---------|-----------|------------|
@@ -48,7 +47,7 @@ A sintaxe do número deve sempre ser em formato internacional.
 Se houverem mais de 200 índices no array, a API irá retornar o respectivo código erro e nenhuma mensagem será processada
 </p>
 </blockquote>
-###from
+##from
 O parâmetro **`from`** é utilizado para indicar o remetente da mensagem.
 | Nome | Tipo | Limitação | Utilização
 |------|------|-----------|------------
@@ -59,7 +58,7 @@ O parâmetro **`from`** é utilizado para indicar o remetente da mensagem.
 "from":"SMSFire"
 }
 ```
-###text
+##text
 O parâmetro **`text`** é utilizado para indicar o texto da mensagem.
 | Nome | Tipo | Limitação | Utilização |
 |------|------|---------|-----------|------------|
@@ -70,10 +69,10 @@ O parâmetro **`text`** é utilizado para indicar o texto da mensagem.
 "to":"Acesse nosso site www.smsfire.com.br"
 }
 ```
-####Codificação do texto
+###Codificação do texto
 Todas as mensagens recepcionadas serão enviadas em codificação GSM-7 e todo caractere fora desta codificação será substituido pelo seu equivalente simplificado.
 <img src="http://www.smsfire.com.br/public/images/table-set.jpg">
-####Mensagens concatenadas
+###Mensagens concatenadas
 O sistema de SMS da SMSFire permite envios de mensagens com até 765 caracteres. Mensagens acima de 160 caracteres, serão divididas em partes iguais de 153 e então cada parte será tarifada individualmente.
 
 Apesar da separação e tarifação individualizada por partes, o destinatário receberá uma mensagem única.
@@ -81,7 +80,7 @@ Apesar da separação e tarifação individualizada por partes, o destinatário 
 <p><b>Atenção:</b><br>
 Algumas operadoras podem encaminhar a mensagem separada com indicações de paginação.</p>
 </blockquote>
-###campaignName
+##campaignName
 O parâmetro **`campaignName`** é utilizado para indicar o nome da campanha do envio.
 Todas os envios, sejam unitários ou em lote farão parte de uma campanha que sempre poderá ser visualizada no <a href="http://portal.smsfire.com.br" target="_blank">***Portal SMSFire***</a>
 | Nome | Tipo | Valor padrão | Limitação | Utilização |
@@ -99,7 +98,7 @@ Se o parâmetro não for especificado, uma campanha nomeada com o **Valor padrã
 Campanhas que tenham as mesmas características serão agrupadas numa única campanha. As características utilizadas de checagem para o agrupamento são nome, custo unitário da mensagem, 2ways, flash, rota, tags e a origem de processamento.</p>
 </blockquote>
 
-###tags
+##tags
 O parâmetro **`tags`** é utilizado para criar etiquetas na campanha do envio. Assim você poderá detalhar melhor os dados da sua campanha e criar melhores filtros.
 | Nome | Tipo | Valor padrão | Limitação | Utilização |
 |------|------|---------|-----------|------------|
@@ -110,7 +109,7 @@ O parâmetro **`tags`** é utilizado para criar etiquetas na campanha do envio. 
 "tags":["julho","promocao","pais"]
 }
 ```
-###schedule 
+##schedule 
 O parâmetro **`schedule`** é utilizado para indicar o agendamento de envio de uma mensagem. A não indicação deste parâmetro fará com que a mensagem seja enviada imediatamente.
 | Nome | Tipo | Formato | Limitação | Utilização |
 |------|------|---------|-----------|------------|
@@ -130,7 +129,7 @@ Atualmente nossas APIs não possuem a função de gestão de mensagens agendadas
 </p>
 </blockquote>
 Para realizar um agendamento de data compátivel com a sua zona horária, consulte o parâmetro `timezone`
-###timezone 
+##timezone 
 O parâmetro **`timezone`** é utilizado para indicar a faixa horária do destinatário quando o parâmetro **`schedule`** é indicado.
 | Nome | Tipo | Timezones | Valor padrão | Utilização |
 |------|------|---------|-----------|------------|
@@ -142,7 +141,7 @@ O parâmetro **`timezone`** é utilizado para indicar a faixa horária do destin
 }
 ```
 Ao indicar o parâmetro **`schedule`** para agendar um envio e nenhum timezone for especificado, o sistema irá considerar o mencionado em **Valor padrão**. Se o timezone indicado neste parâmetro for inválido um erro será dado no callback da requisição.
-###2ways
+##2ways
 
 O parâmetro **`2ways`** é utilizado para ativar o recebimento de respostas das mensagens enviadas no <a href="http://portal.smsfire.com.br">Portal SMSFire</a>, e-mail ou numa URL. Caso o parâmetro não seja especificado, todas as respostas enviadas pelos destinatários não serão visualizadas.
 
@@ -165,7 +164,7 @@ Sabendo destes parâmetros internos do **`2ways`** temos as definições na tabe
 | `2ways:active` | *boolean* | true / false | false | ***Obrigatório***
 | `2ways:url` | *string* | URL | null | *Opcional*
 | `2ways:email` | *string* | E-Mail | null | *Opcional*
-####2ways via URL
+###2ways via URL
 Com o parâmetro **`url`** as respostas recebidas serão enviadas no formato ***JSON*** via método ***POST*** ao seu endpoint sem nenhum custo adicional.
 
 ***Exemplo de JSON***
@@ -206,7 +205,7 @@ Sabendo destes parâmetros enviados ao seu endpoint, temos as definições na ta
 | `ddi` | *string* | *DDI* do número que respondeu a mensagem
 | `mobile` | *string* | Número do usuário que respondeu a mensagem em formato internacional
 | `route` | *string* | Rota utilizada no processamento do envio e do recebimento da resposta
-####2ways via E-mail
+###2ways via E-mail
 Com o parâmetro **`email`** as respostas recebidas serão enviadas ao e-mail especificado com um custo adicional.
 
 É importante adicionar o dominio ***@smsfire.com.br*** como domínio confiável para que as mensagens não caiam em Lixo Eletrônico / Spam
@@ -214,7 +213,7 @@ Com o parâmetro **`email`** as respostas recebidas serão enviadas ao e-mail es
 <b>Atenção:</b><br> A ativação da função 2ways irá gerar custo adicional a sua campanha por cada resposta recebida. Envios de respostas via e-mail gerará um custo adicional de 15% do valor da sua tarifa além do custo do recebimento da resposta. Para mais detalhes entre em contato com a equipe de Suporte
 </p></blockquote>
 
-###notificationUrl
+##notificationUrl
 O parâmetro **`notificationUrl`** deve ser indicado para o recebimento do status final da mensagem enviada. Os dados enviados a url mencionada será um objeto ***JSON*** via método ***POST*** de cada mensagem individualmente.
 | Nome | Tipo | Formato | Valor padrão | Utilização |
 |------|------|---------|-----------|------------|
@@ -225,7 +224,7 @@ O parâmetro **`notificationUrl`** deve ser indicado para o recebimento do statu
 "notificationUrl":"http://www.meusite.com/smsDlr"
 }
 ```
-####Requisição a Url
+###Requisição a Url
 Uma vez que nossos servidores recebam os dados do gateway/operadora, imediatamente enviaremos o objeto ***JSON*** a url mencionada neste parâmetro.
 
 ***Exemplo JSON***
@@ -262,7 +261,7 @@ Sabendo destes parâmetros enviados ao seu endpoint, temos as definições na ta
 | `description` | *string* | Descrição complementar do status da mensagem
 Para consultar os possíveis **`status`**, **`sub_status`** e **`description`** acesse a seção ***Tabela de status***
 
-###routing
+##routing
 O parâmetro **`routing`** é utilizado para indicar por qual rota de envio a campanha deverá ser processada.
 
 | Nome | Tipo | Formato | Valor padrão | Utilização |
@@ -280,9 +279,9 @@ O parâmetro **`routing`** é utilizado para indicar por qual rota de envio a ca
 }
 ```
 Ao indicar o parâmetro **`routing`** a API irá processar o envio a partir da rota escolhida, caso não seja mencionado o sistema irá considerar o **Valor padrão**. Se o routing indicado neste parâmetro for inválido um erro será dado no callback da requisição.
-####Características de rotas
+###Características de rotas
 Avalise sempre qual a melhor rota para o seu tipo de utilização. Cada rota possui características que podem afetar diretamente a efetividade da sua campanha.
-#####Rotas longcode
+####Rotas longcode
 Rotas de baixo custo que podem utilizar tecnologias alternativas para processamento das mensagens até as operadoras, porém possuem maior tempo de demora para o recebimento da mensagem, efetividade de entrega intermitente e baixo custo.
 + Características longcode
     + Demora para entrega da mensagem (até 4 horas)
@@ -299,7 +298,7 @@ Algumas rotas longcode que utilizamos não fornecem os dados de status final e n
 </p>
 </blockquote>
 
-#####Rotas shortcode
+####Rotas shortcode
 Rotas de conexão direta ou via brokers homologados pelas operadoras que possuem excelente qualidade com tempo de demora de entrega reduzido e efetividade de entrega constante.
 + Características shortcode
     + Processamento prioritário para entrega imediata da mensagem
@@ -309,7 +308,7 @@ Rotas de conexão direta ou via brokers homologados pelas operadoras que possuem
     + Status final do tipo Handset (confirmação de recebimento no dispositivo)
     + Capacidade de processamento diário ilimitada
     
-###flash
+##flash
 O parâmetro **`flash`** é utilizado para indicar a classe da mensagem, ou seja, se a mensagem será entregue como um SMS comum ou um SMS "popup"
 
 | Nome | Tipo | Formato | Valor padrão | Utilização |
@@ -437,7 +436,7 @@ Este objeto sempre será individual para cada envio, diferentemente do objeto fo
 
 Veja abaixo os possíveis códigos e detalhes que a API poderá encaminhar ao seu endpoint neste momento.
 
-#####Status
+####Status
 | Code | Name        | Significado 
 |:----:|-------------|------------
 | 2    | DELIVERED   | Mensagem recebida na operadora/dispositivo 
@@ -482,6 +481,171 @@ Abaixo temos o seguinte objeto ***JSON*** completo que será enviado ao endpoint
     "description": "MESSAGE DELIVERED TO CARRIER"
 }
 ```
+
+# Parâmetros WHATSAPP
+Veja nesta seção todos os parâmetros obrigatórios e opcionais para a utilização da API SMSFire para envios de mensagens ao Whatsapp.
+##token
+O parâmetro **`token`** é utilizado em diversos serviços da API para indicar o canal que está recebendo fila de envios, alterações ou sincronização.
+| Nome | Tipo | Utilização
+|---------|:------:|---------|
+| `token` | *string* | **Obrigatória**
+
+O token é formado por um hash de 32 caracteres alfanuméricos. Cada canal possuí o seu próprio token.
+
+***Exemplo JSON***
+```json
+﻿{
+    "token":"49ba5k13çp8xm?d0a976e1a14ea3af35"
+ }
+```
+
+<blockquote>
+<p><b>ATENÇÃO:</b><br>O token somente será disponibilizado aqueles usuários que possuem um ou mais canais configurados em seu acesso.</p>
+</blockquote>
+
+##messageType
+O parâmetro **`messageType`** é utilizado para indicar o tipo de mensagem a ser enviada ao aplicativo.
+
+| Nome | Tipo | Formato | Utilização
+|---------|:------:|---------|---------|
+| `messageType` | *string* | *text,image ou file* | **Obrigatória**
+
+Os formatos de mensagem que são possíveis a serem enviados são
+
+| Valor | Descrição |
+|---------|:------|
+| *text* | Envio de texto simples ou com formatação nativa do aplicativo | 
+| *image* | Envio de imagens  | 
+| *file* | Envio de arquivos PDF, XLS, DOC ou TXT |
+
+<blockquote>
+<p><b>ATENÇÃO:</b><br>Atualmente a API suporta apenas o envio de mensagens no formato <b>text</b>. Caso seja enviado algum dos outros formatos a mensagem será processada como texto padrão.</p>
+</blockquote>
+
+##schedule 
+O parâmetro **`schedule`** é utilizado para indicar o agendamento de envio de uma mensagem. A não indicação deste parâmetro fará com que a mensagem seja enviada imediatamente.
+| Nome | Tipo | Formato | Limitação | Utilização |
+|------|------|---------|-----------|------------|
+| `schedule`| *string* | YYYY-MM-DD HH:II:SS | Não há | *Opcional*
+***Exemplo JSON***
+```json
+    {
+      "schedule":"2018-08-22 15:20:00"
+    }
+```
+
+Ao indicar este modelo de data, a mensagem será agendada para disparo em 22 de Agosto do ano de 2018 às 15:20PM
+
+<blockquote>
+<p><b>Atenção:</b><br>
+Atualmente nossas APIs não possuem a função de gestão de mensagens agendadas, devido a isto caso seja necessário cancelar um agendamento será necessário entrar em contato com a nossa equipe de suporte através do e-mail <a href="mailto:suporte@smsfire.com.br">suporte@smsfire.com.br</a> com no mínimo 2h de antecedência para podermos cancelar o envio.
+</p>
+</blockquote>
+Para realizar um agendamento de data compátivel com a sua zona horária, consulte o parâmetro `timezone`
+##timezone 
+O parâmetro **`timezone`** é utilizado para indicar a faixa horária do destinatário quando o parâmetro **`schedule`** é indicado.
+| Nome | Tipo | Timezones | Valor padrão | Utilização |
+|------|------|---------|-----------|------------|
+| `timezone`| *string* | <a href="https://secure.php.net/manual/pt_BR/timezones.php" target="_blank">Lista completa</a> | America/Sao_Paulo | *Opcional*
+***Exemplo JSON***
+```json
+    {
+      "timezone":"Europe/Madrid"
+    }
+```
+
+##notificationUrl
+O parâmetro **`notificationUrl`** deve ser indicado para o recebimento do status final da mensagem enviada. Os dados enviados a url mencionada será um objeto ***JSON*** via método ***POST*** de cada mensagem individualmente.
+| Nome | Tipo | Formato | Valor padrão | Utilização |
+|------|------|---------|-----------|------------|
+| `notificationUrl` | *string* | *URL* | *null* | *Opcional*
+***Exemplo JSON***
+```json
+    {
+      "notificationUrl":"http://www.meusite.com.br/whatsapp_dlr.php"
+    }
+```
+###Requisição a Url
+Uma vez que nossos servidores façam o processamento das mensagens ao aplicativo do Whatsaap, imediatamente enviaremos o objeto ***JSON*** a url mencionada com os seguintes dados:
+
+***Exemplo JSON***
+```json
+{
+  "id": 16432,
+  "customId": "123456",
+  "to": 55119445566777,
+  "date": "2019-03-07 01:00:00",
+  "pushname": "Roberto Carlos",
+  "photo": "https://pps.whatsapp.net/v/t61.11540-24/51544550_287898701880958_8819848413307731968_n.jpg?oe=5C848BBC&oh=720dc23dac0416eb9b52f7977b454cea&t=l&u=5511945658451@c.us&i=1549468927",
+  "status": {
+    "code": 2,
+    "name": "DELIVERED"
+  },
+  "sub_status": {
+    "code": 1,
+    "name": "OK"
+  },
+  "description": "MESSAGE DELIVERED TO WHATSAPP"
+}
+```
+Sabendo destes parâmetros enviados ao seu endpoint, temos as definições na tabela a seguir
+| Nome | Tipo  | Descrição
+|------|:-----:| ---------
+| `id` | *int* | *ID* da mensagem enviada
+| `customId` | *string* | Identificador definido pelo usuário no momento do envio
+| `to` | *string* | Número do destinatário em formato internacional
+| `date` | *string* | Data do status recebido
+| `pushname` | *string* | Nome fornecido pelo o destinatário ou o que está salvo na lista de contatos
+| `photo` | *string* | *URL* com a foto do perfil do destinatário caso seja de acesso público.
+| `status` | *array* | Detalhe com código e nome do status
+| `status:code` | *int* | Código do status da mensagem
+| `status:name` | *string* | Nome do código de status da mensagem
+| `sub_status` | *array* | Detalhe com código e nome do status complementar
+| `sub_status:code` | *int* | Código do status complementar da mensagem
+| `sub_status:name` | *string* | Nome do código de status complementar da mensagem
+| `description` | *string* | Descrição complementar do status da mensagem
+Para consultar os possíveis **`status`**, **`sub_status`** e **`description`** acesse a seção ***Tabela de status***
+
+##destinations
+O parâmetro **`destinations`** é o responsável a informar os destinatários e seus respectivos textos, url de imagens a serem enviados ao aplicativo Whatsapp.
+
+Este parâmetro é um array composto por índices. Cada índice é um destinatário a ser impactado.
+
+***Exemplo JSON***
+```json
+{
+    "destinations":[
+        {
+          "to":"5511944556677",
+          "text":"Envio do texto 1",
+          "customId":"123456"
+        },
+        {
+          "to":"5511966778899",
+          "text":"Envio do texto 2",
+          "customId":"456789"
+        },
+        {
+          "to":"011969157483",
+          "text":"Envio do texto 3",
+          "customId":"012345"
+        }
+    ]
+}
+````
+Sabendo destes parâmetros internos do **`destinations`** temos as definições na tabela a seguir
+| Nome | Tipo | Formato | Limitação | Utilização |
+|------|:----:|:-------:|:---------:|------------|
+| `destinations` | *array* | --- | 50 índices | ***Obrigatório***
+| `destinations:to` | *string* | DDI+DDD+Número | --- | ***Obrigatório***
+| `destinations:text` | *string* | --- | 1.000 caracteres | ***Obrigatório***
+| `destinations:customId` | *string* | --- | 40 caracteres |  *Opcional*
+
+<blockquote>
+<p><b>Atenção:</b><br>
+Se houverem mais de 50 índices no arrizaay, a API irá retornar o respectivo código erro e nenhuma mensagem será processada
+</p>
+</blockquote>
 
 #Group Serviços da API SMS
 A partir deste módulo, você será capaz de utilizar todas as funcionalidades dos nossos serviços de SMS via API.
@@ -774,6 +938,348 @@ A consulta dá-se mediante uma requisição GET a partir da autenticação do se
           "currency": "BRL"
         }
 
+#Group Serviços da API WHATSAPP
+A partir deste módulo será possivel adquirir a lista de canais, capturar imagem do qrcode para sincronização, atualizar dados do canal e realizar envios ao aplicativo.
+
+##Consultar canais e token [/v1/whatsapp/channels/list]
+**Endpoint:** `http://api.smsfire.com.br/v1/whatsapp/channels/list`
+
+###Testar consulta de canais e token [GET]
+Este serviço permite a consulta da lista dos canais disponibilizados em sua conta assim como o token que é necessário para a utilização dos demais serviços da API Whatsapp. 
+
+A consulta dá-se mediante uma requisição GET a partir da autenticação do seu usuário e os dados são retornados num array de objeto em formato ***JSON***. Abaixo temos seus detalhes
+
+| Nome     | Tipo     | Descrição
+|----------|:--------:|-----------
+|`id`      | *int*    | *ID* do canal
+|`name`    | *string* | Nome registrado para o canal
+|`mobile`  | *string* | Número registrado no whatsapp
+|`token`   | *string* | Hash único do canal necessário para utilizar APIs
+|`status:code`  | *int*    | Código de status da situação do canal
+|`status:name`  | *string* | Nome do status da situação do canal
+|`status:expireDate`| *date* | Data de validade do canal
+|`sync:code`  | *int*    | Código de status da sincronização do canal
+|`sync:name`  | *string* | Nome do status da sincronização do canal
+
+***Exemplo JSON retornado***
+```json
+[
+  {
+    "id": 1,
+    "name": "meu canal",
+    "mobile": "5511966997755",
+    "token": "49ba5k13çp8xm?d0a976e1a14ea3af35",
+    "status": {
+      "code": 2,
+      "name": "ACTIVE",
+      "expireDate": "2019-10-30 23:59:59"
+    },
+    "sync": {
+      "code": 1,
+      "name": "PAIRED"
+    }
+  }
+]
+```
+<blockquote>
+<p><b>ATENÇÃO:</b><br>O parâmetro <u>token</u> deve ser guardado para ser utilizado nos demais serviços da API WHATSAPP.</p>
+</blockquote>
+<blockquote>
+<p>Consulte a seção <u><i>Autenticação</i></u> para ter detalhes de como autenticar a sua requisição</p>
+</blockquote>
+
++ request
+    + Header
+    
+            Authorization: Basic YWRtaW46YWRtaW4=
+
++ response 200 (application/json)
+        
+        [
+          {
+            "id": 1,
+            "name": "meu canal",
+            "mobile": "5511966997755",
+            "token": "49ba5k13çp8xm?d0a976e1a14ea3af35",
+            "status": {
+              "code": 2,
+              "name": "ACTIVE",
+              "expireDate": "2019-10-30 23:59:59"
+            },
+            "sync": {
+              "code": 1,
+              "name": "PAIRED"
+            }
+          }
+        ]
+
+##Hash qrcode e status da sincronização  [/v1/whatsapp/channels/sync]
+**Endpoint:** `http://api.smsfire.com.br/v1/whatsapp/channels/sync`
+
+###Testar captura do hash do qrcode [POST]
+A partir deste serviço é possivel capturar o hash para a impressão do qrcode e o status da sincronização do canal.
+
+A consulta dá-se mediante uma requisição POST a partir da autenticação do seu usuário e o envio do ```token``` do canal no corpo da requisição em objeto ***JSON***.
+
+***Exemplo JSON***
+```json
+ {
+  "token":"49ba5k13çp8xm?d0a976e1a14ea3af35"
+ }
+```
+
+Os dados são retornados num objeto em formato ***JSON***. Abaixo temos seus detalhes
+
+| Nome           | Tipo     | Descrição
+|----------------|:--------:|-----------
+|`status`        | *string* | Status da sincronização do canal
+|`code`          | *int*    | Código do status da sincronização do canal
+|`qrcode`        | *string* | Hash necessário para a impressão do qrcode
+|`channel:id`    | *int*    | *ID* do canal que está sendo consultado
+|`channel:name`  | *string* | Nome do canal que está sendo consultado
+|`channel:mobile`| *string* | Número do canal que está sendo consultado
+
+***Exemplo JSON retornado***
+```json
+{
+  "status": "SCAN QRCODE",
+  "code": 0,
+  "qrcode": "aae46d64e0d6b690znvf0838a1dbdd6c",
+  "channel": {
+    "id": 1,
+    "name": "meu canal",
+    "mobile": "5511966997755"
+  }
+}
+```
+
+<blockquote>
+<p><b>OBSERVAÇÃO:</b><br>O hash do qrcode é atualizado a cada <b>60 segundos</b>. Um hash desatualizado pode trazer um qrcode inválido e impossibilitando a correta sincronização do canal.</p>
+</blockquote>
+
+<blockquote>
+<p><b>ATENÇÃO:</b><br>O hash no parâmetro qrcode é necessário para a impressão da imagem do qrcode. Sem ele não será possível realizar a sincronização do canal via API.</p>
+</blockquote>
+
++ Attributes
+     + token: 49ba5k13çp8xm?d0a976e1a14ea3af35 (string, required) - Token do canal.
+
++ request (application/json)
+    + Header
+    
+            Authorization: Basic YWRtaW46YWRtaW4=
+    
+    + Body
+    
+             {
+              "token":"49ba5k13çp8xm?d0a976e1a14ea3af35"
+             }
+
++ Response 200 (application/json)
+
+        {
+          "status": "SCAN QRCODE",
+          "code": 0,
+          "qrcode": "aae46d64e0d6b690znvf0838a1dbdd6c",
+          "channel": {
+            "id": 1,
+            "name": "meu canal",
+            "mobile": "5511966997755"
+          }
+        }
+
+##Envio de mensagem ao aplicativo [/v1/whatsapp/send]
+**Endpoint:** `http://api.smsfire.com.br/v1/whatsapp/send`
+
+###Testar envio de mensagem [POST]
+Este serviço permite o envio de mensagem ao Whatsapp para um ou mais destinatários de forma imediata ou agendada com base no fuso horário do destinatário.
+
+Todos os dados parâmetros devem ser enviados via POST num objeto em ***JSON***.
+
+***Exemplo JSON completo***
+```json
+    {
+        "token":"49ba5k13çp8xm?d0a976e1a14ea3af35",
+        "messageType":"text",
+        "schedule":"2019-03-01 18:00:00",
+        "timezone":"America/Sao_Paulo",
+        "notificationUrl":"http://www.meusite.com.br/whatsapp_dlr.php",
+        "destinations":[
+            {
+                "to":"5511944556677",
+                "text":"Envio do texto 1",
+                "customId":"123456"
+            },
+            {
+                "to":"5511966778899",
+                "text":"Envio do texto 2",
+                "customId":"456789"
+            },
+            {
+                "to":"011969157483",
+                "text":"Envio do texto 3",
+                "customId":"012345"
+            }
+        ]
+    }
+```
+
+Logo que a requisição for bem sucedida, sem erros, nós teremos a resposta HTTP *202 - Accepted* para envios individuais ou *207 - Multi-Status* para envios múltiplos com o seguinte objeto ***JSON*** como resposta
+
+***Callback JSON da requisição***
+
+```json
+{
+  "token": "49ba5k13çp8xm?d0a976e1a14ea3af35",
+  "messageType": "text",
+  "volume": 3,
+  "sendAt": {
+    "time": "2019-03-01 18:00:00",
+    "timezone": "America\/Sao_Paulo"
+  },
+  "results": [
+    {
+      "to": 011969157483,
+      "error": {
+        "code": 132,
+        "description": "Number without country prefix."
+      }
+    },
+    {
+      "id": 31589,
+      "to": 5511944556677,
+      "status": {
+        "code": 6,
+        "name": "SCHEDULED",
+        "detail": "DATA SCHEDULED AT THE CARRIER"
+      }
+    },
+    {
+      "id": 31588,
+      "to": 5511966778899,
+      "status": {
+        "code": 6,
+        "name": "SCHEDULED",
+        "detail": "DATA SCHEDULED AT THE CARRIER"
+      }
+    }
+  ]
+}
+```
+Sabendo do objeto ***JSON*** recebido no callback, a tabela abaixo detalha os valores de cada um dos parâmetros.
+| Nome     | Tipo     | Descrição
+|----------|:--------:|-----------
+|`token`   | *string* | *TOKEN* do canal utilizado no envio
+|`messageType` | *string* | Indicação do tipo de mensagem enviada
+|`volume`    | *int*  | Total de envios formalizados no envio
+|`sendAt:time`    | *date*  | Data em que a mensagem entrará na fila para processamento
+|`sendAt:timezone`  | *string*    | Timezone do destinatário especificado no envio
+####Indice `results`
+| Nome          | Tipo     | Descrição
+|---------------|:--------:|-----------
+|`id`           | *int*    | *ID* da mensagem enviada
+|`to`           | *int*    | Número do destinatário em formato internacional
+|`status:code`  | *int*    | Código de status inicial da mensagem
+|`status:name`  | *string* | Nome do status inicial da mensagem
+|`status:detail`| *int*    | Detalhe do status inicial da mensagem
+|`error:code`| *int*    | Código do erro ao destinatário especificado, caso haja
+|`error:description`| *string*    | Detalhe do erro ao destinatário especificado, caso haja
+
+<blockquote>
+<p><b>ATENÇÃO:</b><br>Consultar a seção Parâmetros Whatsapp para ter o detalhe de cada uma das variáveis e códigos de status retornados.</p>
+</blockquote>
+
++ Attributes
+    + token: 49ba5k13çp8xm?d0a976e1a14ea3af35 (string, required) - Token do canal que processará os envios
+    + messageType: text (string, required) - Tipo de envio a ser formalizado.
+    + schedule: `2019-03-01 18:00:00` (string, optional) - Data de agendamento da mensagem
+    + timezone: America/Sao_Paulo (string, optional) - Faixa horária do destinatário
+    + notificationUrl: http://www.meusite.com.br/whatsapp_dlr.php (string, optional) - Url para o direcionamento do status final da mensagem
+    + destinations (array,required) - popo
+        + (object)
+            + to: 5511944556677  (string,required) - Número do destinatário com código do país.
+            + text: Envio do texto 1  (string,required) - Texto a ser enviado na mensagem
+            + customId: 123456 (string,optional) - Identificador custonomizado do cliente
+        + (object)
+            + to: 5511966778899  (string,required) - Número do destinatário com código do país.
+            + text: Envio do texto 1  (string,required) - Texto a ser enviado na mensagem
+            + customId: 456789 (string,optional) - Identificador custonomizado do cliente
+        + (object)
+            + to: 011969157483 (string,required) - Número do destinatário com código do país.
+            + text: Envio do texto 3  (string,required) - Texto a ser enviado na mensagem
+            + customId: 012345 (string,optional) - Identificador custonomizado do cliente
+
++ request (application/json)
+    + Header
+    
+            Authorization: Basic YWRtaW46YWRtaW4=
+    
+    + Body
+    
+            {
+                "token":"49ba5k13çp8xm?d0a976e1a14ea3af35",
+                "messageType":"text",
+                "schedule":"2019-03-01 18:00:00",
+                "timezone":"America/Sao_Paulo",
+                "notificationUrl":"http://www.meusite.com.br/whatsapp_dlr.php",
+                "destinations":[
+                    {
+                        "to":"5511944556677",
+                        "text":"Envio do texto 1",
+                        "customId":"123456"
+                    },
+                    {
+                        "to":"5511966778899",
+                        "text":"Envio do texto 2",
+                        "customId":"456789"
+                    },
+                    {
+                        "to":"011969157483",
+                        "text":"Envio do texto 3",
+                        "customId":"012345"
+                    }
+                ]
+            }
+
++ Response 207 (application/json)
+
+            {
+            "token": "49ba5k13çp8xm?d0a976e1a14ea3af35",
+            "messageType": "text",
+            "volume": 3,
+            "sendAt": {
+                "time": "2019-03-01 18:00:00",
+                "timezone": "America\/Sao_Paulo"
+            },
+            "results": [
+                {
+                    "to": 011969157483,
+                    "error": {
+                        "code": 132,
+                        "description": "Number without country prefix."
+                    }
+                },
+                {
+                    "id": 31589,
+                    "to": 5511944556677,
+                    "status": {
+                        "code": 6,
+                        "name": "SCHEDULED",
+                        "detail": "DATA SCHEDULED AT THE CARRIER"
+                    }
+                },
+                {
+                "id": 31588,
+                "to": 5511966778899,
+                "status": {
+                    "code": 6,
+                    "name": "SCHEDULED",
+                    "detail": "DATA SCHEDULED AT THE CARRIER"
+                    }
+                }
+            ]
+            }
+    
 #Group Suporte técnico
 A todos os nossos clientes oferecemos suporte técnico em horário comercial das 9:00h as 18:00h de segunda a sexta.
 

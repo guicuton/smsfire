@@ -1279,7 +1279,98 @@ Sabendo do objeto ***JSON*** recebido no callback, a tabela abaixo detalha os va
                 }
             ]
             }
+
+##Consultar mensagens recebidas no aplicativo [/v1/whatsapp/inbox/{filter}]
+**Endpoint:** `http://api.smsfire.com.br/v1/whatsapp/inbox/{filter}`
+
+###Testar consulta de mensagens [GET]
+Este serviço permite a consulta das mensagens recebidas no WhatsApp do número que está sincronizado na API ou Portal.
+
+A consulta pode ser filtrada pelo parâmetro `filter` que é aplicado diretamente ao endpoint.
+Caso o tipo de filtro não seja aplicado, a API sempre irá retornar as mensagens não lidas e caso não haja nenhuma pendente de leitura o retorno da consulta será vazio.
+
+A consulta dá-se mediante uma requisição GET a partir da autenticação do seu usuário e os dados são retornados num array de objeto em formato ***JSON***. Abaixo temos seus detalhes
+
+| Nome     | Tipo     | Descrição
+|----------|:--------:|-----------
+|`id`      | *string*    | *ID* da mensagem
+|`channelId`    | *int* | ID do canal que recebeu a mensagem
+|`ddi`  | *int* | Prefixo do país do remetente
+|`mobile`   | *string* | Número em formato internacional do remetente
+|`text`  | *string*    | Texto recebido do remetente
+|`date`  | *data* | Data da resposta. YYYY-MM-DD HH:II:SS
+|`pushname`| *string* | Nome registrado ou salvo na agenda do remetente
+|`photo`  | *url*    | URL interna do aplicativo com a foto de perfil atualizada
+|`status`  | *int* | Status da mensagem. 1 para lida, 0 para não lida
+
+***Exemplo de JSON retornado***
+```json
+[
+    {
+        "id": "31b982044fd7aad86d5d08800a4024fd",
+        "channelId": 1,
+        "ddi": 55,
+        "mobile": "5511944556677",
+        "text": "Quero mais informações",
+        "date": "2019-03-14 19:45:00",
+        "pushname": "João Silva",
+        "photo": "https:\/\/pps.whatsapp.net\/v\/t61.11540-24\/52649917_1025710290947783_7550774246939557888_n.jpg?oe=5C8ECE2F&oh=65b933cce0400fbf2ca703faafffcad3&t=l&u=5511998590872@c.us&i=1551285021",
+        "status": 0
+    },
+    {
+        "id": "751b604057dc140a65f573330a0ad3e6",
+        "channelId": 1,
+        "ddi": 55,
+        "mobile": "5511966778899",
+        "text": "Pode me enviar um telefone de contato?",
+        "date": "2019-03-14 19:24:00",
+        "pushname": "Marcelo Guimarães",
+        "photo": "https:\/\/pps.whatsapp.net\/v\/t61.11540-24\/52649917_1025710290947783_7550774246939557888_n.jpg?oe=5C8ECE2F&oh=65b933cce0400fbf2ca703faafffcad3&t=l&u=5511998590872@c.us&i=1551285021",
+        "status": 1
+    }
+]
+```
+
+<blockquote>
+<p><b>IMPORTANTE:</b><br>Para que o sistema consiga captar as respostas é necessário que o número esteja sincronizado e que haja a marcação de <i>mensagem não lida</i>.</p>
+</blockquote>
+
++ parameters
+    + filter: all (string,optional) - Filtro da consulta (all,new,old)
+
+
++ request
+    + Header
     
+            Authorization: Basic YWRtaW46YWRtaW4=
+
++ response 200 (application/json)
+
+        [
+            {
+                "id": "31b982044fd7aad86d5d08800a4024fd",
+                "channelId": 1,
+                "ddi": 55,
+                "mobile": "5511944556677",
+                "text": "Quero mais informações",
+                "date": "2019-03-14 19:45:00",
+                "pushname": "João Silva",
+                "photo": "https:\/\/pps.whatsapp.net\/v\/t61.11540-24\/52649917_1025710290947783_7550774246939557888_n.jpg?oe=5C8ECE2F&oh=65b933cce0400fbf2ca703faafffcad3&t=l&u=5511998590872@c.us&i=1551285021",
+                "status": 0
+            },
+            {
+                "id": "751b604057dc140a65f573330a0ad3e6",
+                "channelId": 1,
+                "ddi": 55,
+                "mobile": "5511966778899",
+                "text": "Pode me enviar um telefone de contato?",
+                "date": "2019-03-14 19:24:00",
+                "pushname": "Marcelo Guimarães",
+                "photo": "https:\/\/pps.whatsapp.net\/v\/t61.11540-24\/52649917_1025710290947783_7550774246939557888_n.jpg?oe=5C8ECE2F&oh=65b933cce0400fbf2ca703faafffcad3&t=l&u=5511998590872@c.us&i=1551285021",
+                "status": 1
+            }
+        ]
+
 #Group Suporte técnico
 A todos os nossos clientes oferecemos suporte técnico em horário comercial das 9:00h as 18:00h de segunda a sexta.
 

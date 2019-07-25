@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: http://api.smsfire.com.br
+HOST: https://api.smsfire.com.br
 
 # SMSFire - REST API
 
@@ -22,7 +22,7 @@ Caso haja erro na autenticação, o respectivo código de erro será retornado.
 Authorization: Basic Y29udGE6c2VuaGE=
 ```
 
-O valor após a palavra Basic é uma chave (hash) em Base64 formados pelos seus dados de usuário e senha. 
+O valor após a palavra Basic é uma chave (token) em Base64 formados pelos seus dados de usuário e senha. 
 A formação dessa chave pode ser feita em PHP com a função nativa <a href="http://php.net/manual/pt_BR/function.base64-encode.php" target="_blank"><b><i>base64_encode("usuario:senha")</i></b></a> da linguagem.
 <br><br>
 O site <a href="https://www.base64encode.org/" target="_blank">base64Encode</a> também faz essa codificação gratuitamente.
@@ -326,56 +326,6 @@ O parâmetro **`flash`** é utilizado para indicar a classe da mensagem, ou seja
 Este parâmetro apenas tem efeito em envios de mensagens pela rota Shortcode.
 </p>
 </blockquote> 
-##Tabela de erros
-Todos os códigos de erros são compostos pela matriz **`error`** formatados num objeto ***JSON***.
-Na tabela abaixo estão listados todos os códigos, descrições e ações que devem ser realizadas para cada situação.
-| Code   | Description                                             | Http Response | Ação
-|:------:|---------------------------------------------------------|:-------------:|------
-| 101    | Username unknown                                        | 401           | Verifique o nome de usuário.
-| 102    | Invalid password                                        | 401           | Senha informada é incorreta.
-| 103    | Username Blocked                                        | 403           | Usuário bloqueado. Contate o suporte.
-| 104    | Invalid endpoint                                        | 404           | Endpoint consumido não existe.
-| 105    | Method not allowed                                      | 405           | Método de envio de dados não permitido.
-| 106    | Content type not allowed                                | 406           | Modifique o *Content-type* do cabeçalho para o formato permitido.
-| 107    | Parameter TO is required                                | 400           | O parâmetro `to` é obrigatório e não foi mencionado.
-| 108    | Parameter TO invalid                                    | 400           | O parâmetro `to` deve ser um array.
-| 109    | Parameter TO do not accept more than 200 items          | 400           | O parâmetro `to` não pode conter mais que 200 indices.
-| 110    | Parameter FROM is required                              | 400           | O parâmetro `from` é obrigatório e não foi mencionado.
-| 111    | Parameter FROM too long.                                | 400           | O parâmetro `from` não pode contar mais que 11 caracteres.
-| 112    | Parameter TEXT is required                              | 400           | O parâmetro `text` é obrigatório e não foi mencionado.
-| 113    | Parameter TEXT is too long                              | 400           | O parâmetro `text` não pode conter mais que 765 caracteres.
-| 114    | Parameter SCHEDULE invalid                              | 400           | O parâmetro `schedule` foi fornecido com data passada ou em formato inválido.
-| 115    | Parameter TIMEZONE invalid                              | 400           | O timezone informado não existe. Campo *case-sensitivity*
-| <strike>116</strike> | <strike>Parameter FLASH invalid</strike>  | <strike>400</strike> | <strike>O parâmetro `flash`não teve seu valor indicado como *boolean* </strike>
-| 117    | Parameter 2WAYS > Active invalid                        | 400           | O parâmetro `active` da chave `2ways` não teve seu valor indicado como *boolean*
-| 118    | Could not define URL or EMAIL data with ACTIVE as false | 400           | Defina o parâmetro `active` como *true* da chave `2ways` para poder indicar valores nos parâmetros `url` e/ou `email`
-| 119    | Parameter 2WAYS > Email invalid                         | 400           | Informe um e-mail válido no parâmetro `email` da chave `2ways`.
-| 120    | Parameter 2WAYS > Url invalid                           | 400           | Informe uma url válida no parâmetro `url` da chave `2ways`.
-| 121    | Parameter CAMPAIGNNAME too long                         | 400           | O parâmetro `campaignName` não pode conter mais que 100 caracteres.
-| 122    | Parameter TAGS invalid                                  | 400           | O parâmetro `tags`deve ser um array.
-| 123    | Parameter ROUTING invalid                               | 400           | O parâmetro `routing` não teve seu valor indicado como *integer*.
-| 124    | Parameter NOTIFICATIONURL invalid                       | 400           | Informe uma url válida no parâmetro `notificationUrl`.
-| 125    | You are not allowed to reach the destination            | 205           | Sua conta não pode enviar mensagem ao país especificado. Contate o suporte.
-| 126    | It is forbidden send multi country campaign             | 400           | Crie campanhas distintas para cada país.
-| 127    | Parameter ID invalid                                    | 400           | O `id` deve conter apenas números.
-| 401    | Login were canceled                                     | 401           | A validação do usuário e senha foi cancelada.
-| 1xxx   | Database Error                                          | 500           | Falha no servidor. Contate o suporte com o código retornado.
-Sabendo dos possíveis códigos de erro que a API pode retornar, veja abaixo um exemplo do objeto *JSON*
-
-***Exemplo JSON***
-```json
-{
-"error":{
-    "code":121,
-    "description":"Parameter CAMPAIGNNAME too long. Maximum 100 characters."
-    }
-}
-```
-<blockquote>
-<p><b>Atenção:</b><br>
-Quando a API retorna erro, nenhum envio é processado
-</p>
-</blockquote>
 
 ##Tabela de status
 As mensagens enviadas a partir da API da SMSFire possuem status inicial e final.
@@ -490,7 +440,7 @@ O parâmetro **`token`** é utilizado em diversos serviços da API para indicar 
 |---------|:------:|---------|
 | `token` | *string* | **Obrigatória**
 
-O token é formado por um hash de 32 caracteres alfanuméricos. Cada canal possuí o seu próprio token.
+O token é formado por um token de 32 caracteres alfanuméricos. Cada canal possuí o seu próprio token.
 
 ***Exemplo JSON***
 ```json
@@ -508,19 +458,14 @@ O parâmetro **`messageType`** é utilizado para indicar o tipo de mensagem a se
 
 | Nome | Tipo | Formato | Utilização
 |---------|:------:|---------|---------|
-| `messageType` | *string* | *text,image ou file* | **Obrigatória**
+| `messageType` | *string* | *text ou image* | **Obrigatória**
 
 Os formatos de mensagem que são possíveis a serem enviados são
 
 | Valor | Descrição |
 |---------|:------|
 | *text* | Envio de texto simples ou com formatação nativa do aplicativo | 
-| *image* | Envio de imagens  | 
-| *file* | Envio de arquivos PDF, XLS, DOC ou TXT |
-
-<blockquote>
-<p><b>ATENÇÃO:</b><br>Atualmente a API suporta apenas o envio de mensagens no formato <b>text</b>. Caso seja enviado algum dos outros formatos a mensagem será processada como texto padrão.</p>
-</blockquote>
+| *image* | Envio de imagens (JPG e JPEG somente)  | 
 
 ##schedule 
 O parâmetro **`schedule`** é utilizado para indicar o agendamento de envio de uma mensagem. A não indicação deste parâmetro fará com que a mensagem seja enviada imediatamente.
@@ -618,12 +563,14 @@ Este parâmetro é um array composto por índices. Cada índice é um destinatá
         {
           "to":"5511944556677",
           "text":"Envio do texto 1",
-          "customId":"123456"
+          "customId":"123456",
+          "fileUrl":"https://i.imgur.com/9L6xi78.jpg"
         },
         {
           "to":"5511966778899",
           "text":"Envio do texto 2",
-          "customId":"456789"
+          "customId":"456789",
+          "fileUrl":"https://i.imgur.com/9L6xi78.jpg"
         },
         {
           "to":"011969157483",
@@ -640,17 +587,132 @@ Sabendo destes parâmetros internos do **`destinations`** temos as definições 
 | `destinations:to` | *string* | DDI+DDD+Número | --- | ***Obrigatório***
 | `destinations:text` | *string* | --- | 1.000 caracteres | ***Obrigatório***
 | `destinations:customId` | *string* | --- | 40 caracteres |  *Opcional*
+| `destinations:fileUrl` | *string* | --- | Arquivos JPG ou JPEG |  *Opcional*
 
 <blockquote>
 <p><b>Atenção:</b><br>
-Se houverem mais de 50 índices no arrizaay, a API irá retornar o respectivo código erro e nenhuma mensagem será processada
+Se houverem mais de 50 índices no array, a API irá retornar o respectivo código erro e nenhuma mensagem será processada
+</p>
+</blockquote>
+
+<blockquote>
+<p><b>Importante:</b><br>
+O parâmetro <i>fileUrl</i> somente terá utilidade caso o <i>messageType</i> seja para envios de imagens ou arquivos
+</p>
+</blockquote>
+
+# Parâmetros BIGDATA
+Veja nesta seção todos os parâmetros obrigatórios e opcionais para a utilização da API SMSFire para consultas no Bigdata com fontes públicas e privadas de dados.
+##doc
+O parâmetro **`doc`** é utilizado para indicar o documento CPF ou CNPJ de acordo com o endpoint.
+| Nome | Tipo | Utilização
+|---------|:------:|---------|
+| `doc` | *string* | **Obrigatória**
+
+O valor deste parâmetro deve conter 11 caracteres para consulta por pessoa, ou então conter 14 caracteres para consulta por empresa.
+
+***Exemplo JSON***
+```json
+﻿{
+    "doc":"02708702203"
+ }
+```
+##renew
+O parâmetro **`renew`** é utilizado para indicar se a consulta resultará em dados de uma pessoa/empresa já consultada pelo usuário ou se então irá buscar no Bigdata por novos dados.
+| Nome | Tipo | Valor padrão | Utilização
+|---------|:------:|:---------:|---------|
+| `renew` | *boolean* | *true* | **Opcional** |
+
+***Exemplo JSON***
+```json
+﻿{
+    "renew":false
+ }
+```
+
+<blockquote>
+<p><b>Importante:</b><br>
+A consulta somente será tarifada se o parâmetro permanecer como <i>true</i>.<br><br>
+Ao renovar a consulta <u>podem não existir novos dados</u> e ainda assim, a tarifa será cobrada.
+</p>
+</blockquote>
+
+#Tabela de erros
+Todos os códigos de erros são compostos pela matriz **`error`** formatados num objeto ***JSON***.
+Na tabela abaixo estão listados todos os códigos, descrições e ações que devem ser realizadas para cada situação.
+| Code   | Description                                             | Http Response | Ação
+|:------:|---------------------------------------------------------|:-------------:|------
+| 101    | Username unknown                                        | 401           | Verifique o nome de usuário.
+| 102    | Invalid password                                        | 401           | Senha informada é incorreta.
+| 103    | Username Blocked                                        | 403           | Usuário bloqueado. Contate o suporte.
+| 104    | Invalid endpoint                                        | 404           | Endpoint consumido não existe.
+| 105    | Method not allowed                                      | 405           | Método de envio de dados não permitido.
+| 106    | Content type not allowed                                | 406           | Modifique o *Content-type* do cabeçalho para o formato permitido.
+| 107    | Parameter TO is required                                | 400           | O parâmetro `to` é obrigatório e não foi mencionado.
+| 108    | Parameter TO invalid                                    | 400           | O parâmetro `to` deve ser um array.
+| 109    | Parameter TO do not accept more than 200 items          | 400           | O parâmetro `to` não pode conter mais que 200 indices.
+| 110    | Parameter FROM is required                              | 400           | O parâmetro `from` é obrigatório e não foi mencionado.
+| 111    | Parameter FROM too long.                                | 400           | O parâmetro `from` não pode conter mais que 11 caracteres.
+| 112    | Parameter TEXT is required                              | 400           | O parâmetro `text` é obrigatório e não foi mencionado.
+| 113    | Parameter TEXT is too long                              | 400           | O parâmetro `text` não pode conter mais que 765 caracteres.
+| 114    | Parameter SCHEDULE invalid                              | 400           | O parâmetro `schedule` foi fornecido com data passada ou em formato inválido.
+| 115    | Parameter TIMEZONE invalid                              | 400           | O timezone informado não existe. Campo *case-sensitivity*
+| 116    | Parameter FLASH invalid                                 | 400           | O parâmetro `flash`não teve seu valor indicado como *boolean*
+| 117    | Parameter 2WAYS > Active invalid                        | 400           | O parâmetro `active` da chave `2ways` não teve seu valor indicado como *boolean*
+| 118    | Could not define URL or EMAIL data with ACTIVE as false | 400           | Defina o parâmetro `active` como *true* da chave `2ways` para poder indicar valores nos parâmetros `url` e/ou `email`
+| 119    | Parameter 2WAYS > Email invalid                         | 400           | Informe um e-mail válido no parâmetro `email` da chave `2ways`.
+| 120    | Parameter 2WAYS > Url invalid                           | 400           | Informe uma url válida no parâmetro `url` da chave `2ways`.
+| 121    | Parameter CAMPAIGNNAME too long                         | 400           | O parâmetro `campaignName` não pode conter mais que 100 caracteres.
+| 122    | Parameter TAGS invalid                                  | 400           | O parâmetro `tags`deve ser um array.
+| 123    | Parameter ROUTING invalid                               | 400           | O parâmetro `routing` não teve seu valor indicado como *integer*.
+| 124    | Parameter NOTIFICATIONURL invalid                       | 400           | Informe uma url válida no parâmetro `notificationUrl`.
+| 125    | You are not allowed to reach the destination            | 205           | Sua conta não pode enviar mensagem ao país especificado. Contate o suporte.
+| 126    | It is forbidden send multi country campaign             | 400           | Crie campanhas distintas para cada país.
+| 127    | Parameter ID invalid                                    | 400           | O `id` deve conter apenas números.
+| 128    | Parameter NAME is required                              | 400           | O parâmetro `name` é obrigatório e não foi mencionado.
+| 129    | Parameter NAME too long. Maximum 50 characters.         | 400           | O parâmetro `name` não pode conter mais que 50 caracteres.
+| 131    | Data should be a valid mobile with international sintax.| 400           | O parâmetro `mobile` tem que ser em formato internacional Ex. 5511944556677
+| 133    | Parameter TOKEN is required                             | 400           | O parâmetro `token` é obrigatório e não foi mencionado.
+| 134    | Parameter TOKEN invalid.                                | 400           | O `token` informado é inválido.
+| 135    | Parameter TOKEN invalid for the logged user.            | 400           | O `token` informado é inválido.
+| 136    | Parameter ID incorrect. Data should be a valid id.      | 400           | O `id` informado é inválido/inexistente.
+| 137    | This channel is deactivated. Contact support            | 402           | O canal informado está desativado.
+| 139    | Parameter QRCODE invalid                                | 400           | O token informado está fora do padrão aceito pelo sistema.
+| 140    | Parameter QRCODE expired. Get new qrcode token.         | 404           | O token do qrcode está expirado. Capture um novo token.
+| 141    | Parameter MESSAGETYPE is required.                      | 400           | O `parâmetro messageType` é obrigatório e não foi mencionado.
+| 142    | Parameter MESSATETYPE invalid. Data should be string.   | 400           | O parâmetro `messageType` deve ser uma string.
+| 143    | Parameter MESSATETYPE invalid. Data should be text or file.             | 400 | O parâmetro `messageType` deve ter valores especificos, consulte detalhes na documentação.
+| 144    | Parameter DESTINATIONS is required.                     | 400           | O parâmetro `destinations` é obrigatório e não foi mencionado.
+| 145    | Parameter DESTINATIONS invalid. Data should be array.   | 400           | O parâmetro `destinations` deve ser um array.
+| 146    | Parameter TO invalid. Data sould be a valid number.     | 400           | O  parâmetro `to` deve ser um número válido em formato internacional.
+| 147    | Parameter TEXT too long. Maximum 1000 characters.       | 400           | O parâmetro `text` deve ser uma string de até 1.000 caracteres.
+| 148    | Parameter CUSTOMID invalid. Data should be string.      | 400           | O parâmetro `customId` deve ser uma string de até 40 caracteres.
+| 149    | Account not allowed to use links.                       | 403           | A conta não tem permissão para envio de Link. Contate o suporte.
+| 150    | Only JPG/JPEG images are allowed.                       | ---           | Somente as extensões JPG e JPEG são permitidas.
+| 151    | File not found or not authorized to catch.              | 403           | O conteúdo do parâmetro `fileUrl` não existe ou não tem permissão de captura.
+| 401    | Login were canceled                                     | 401           | A validação do usuário e senha foi cancelada.
+| 1xxx   | Database Error                                          | 500           | Falha no servidor. Contate o suporte com o código retornado.
+Sabendo dos possíveis códigos de erro que a API pode retornar, veja abaixo um exemplo do objeto *JSON*
+
+***Exemplo JSON***
+```json
+{
+"error":{
+    "code":121,
+    "description":"Parameter CAMPAIGNNAME too long. Maximum 100 characters."
+    }
+}
+```
+<blockquote>
+<p><b>Atenção:</b><br>
+Quando a API retorna erro, nenhum envio é processado, ou então dependendo do canal utilizado o envio com erro é ignorado
 </p>
 </blockquote>
 
 #Group Serviços da API SMS
 A partir deste módulo, você será capaz de utilizar todas as funcionalidades dos nossos serviços de SMS via API.
 ##Envio de SMS [/v1/sms/send]
-**Endpoint:** `http://api.smsfire.com.br/v1/sms/send`
+**Endpoint:** `https://api.smsfire.com.br/v1/sms/send`
 
 ###Testar envio de SMS [POST]
 
@@ -660,7 +722,7 @@ Este serviço permite o envio de SMS para um ou mais destinatários de forma ime
 ***Exemplo JSON simplificado***
 ```json
 {
-    "to":["5511944556677","5511977889900],
+    "to":["5511944556677","5511977889900"],
     "from":"30125",
     "text":"Activation code: 20181907"
 }
@@ -837,7 +899,7 @@ Sabendo do objeto ***JSON*** recebido no callback, a tabela abaixo detalha os va
 
     
 ##Consultar status [/v1/sms/status/{id}]
-**Endpoint:** `http://api.smsfire.com.br/v1/sms/status/{id}`
+**Endpoint:** `https://api.smsfire.com.br/v1/sms/status/{id}`
 
 ###Testar consulta de status [GET]
 
@@ -899,7 +961,7 @@ Caso o `id` consultado não exista, o objeto retornado terá seus valores como *
 #Group Serviços da API ACCOUNT
 A partir deste módulo, você poderá consultar via API todos os dados da conta como saldo, tarifas, países configurados entre outras informações.
 ##Consultar saldo [/v1/account/balance]
-**Endpoint:** `http://api.smsfire.com.br/v1/account/balance`
+**Endpoint:** `https://api.smsfire.com.br/v1/account/balance`
 
 ###Testar consulta de saldo [GET]
 
@@ -941,8 +1003,15 @@ A consulta dá-se mediante uma requisição GET a partir da autenticação do se
 #Group Serviços da API WHATSAPP
 A partir deste módulo será possivel adquirir a lista de canais, capturar imagem do qrcode para sincronização, atualizar dados do canal e realizar envios ao aplicativo.
 
+Os envios tanto pela API e também por Portal podem causar o bloqueio do número utilizado na aplicação. Portanto, não recomendamos o uso para envios em massa a contatos que não pertençam a lista de contatos.
+
+As mensagens, em casos excepcionais podem demorar até 24h para serem entregues.
+Mensagens serão expiradas (não processadas) caso o número perca a sincronização com a aplicação. 
+
+Caso o número permaneça sincronizado e ainda assim tenham mensagens expiradas, entre em contato com a equipe de suporte.
+
 ##Consultar canais e token [/v1/whatsapp/channels/list]
-**Endpoint:** `http://api.smsfire.com.br/v1/whatsapp/channels/list`
+**Endpoint:** `https://api.smsfire.com.br/v1/whatsapp/channels/list`
 
 ###Testar consulta de canais e token [GET]
 Este serviço permite a consulta da lista dos canais disponibilizados em sua conta assim como o token que é necessário para a utilização dos demais serviços da API Whatsapp. 
@@ -954,7 +1023,7 @@ A consulta dá-se mediante uma requisição GET a partir da autenticação do se
 |`id`      | *int*    | *ID* do canal
 |`name`    | *string* | Nome registrado para o canal
 |`mobile`  | *string* | Número registrado no whatsapp
-|`token`   | *string* | Hash único do canal necessário para utilizar APIs
+|`token`   | *string* | Token único do canal necessário para utilizar APIs
 |`status:code`  | *int*    | Código de status da situação do canal
 |`status:name`  | *string* | Nome do status da situação do canal
 |`status:expireDate`| *date* | Data de validade do canal
@@ -1013,11 +1082,11 @@ A consulta dá-se mediante uma requisição GET a partir da autenticação do se
           }
         ]
 
-##Hash qrcode e status da sincronização  [/v1/whatsapp/channels/sync]
-**Endpoint:** `http://api.smsfire.com.br/v1/whatsapp/channels/sync`
+##Token qrcode e status da sincronização  [/v1/whatsapp/channels/sync]
+**Endpoint:** `https://api.smsfire.com.br/v1/whatsapp/channels/sync`
 
-###Testar captura do hash do qrcode [POST]
-A partir deste serviço é possivel capturar o hash para a impressão do qrcode e o status da sincronização do canal.
+###Testar captura do token do qrcode [POST]
+A partir deste serviço é possivel capturar o token para a impressão do qrcode e o status da sincronização do canal.
 
 A consulta dá-se mediante uma requisição POST a partir da autenticação do seu usuário e o envio do ```token``` do canal no corpo da requisição em objeto ***JSON***.
 
@@ -1034,7 +1103,7 @@ Os dados são retornados num objeto em formato ***JSON***. Abaixo temos seus det
 |----------------|:--------:|-----------
 |`status`        | *string* | Status da sincronização do canal
 |`code`          | *int*    | Código do status da sincronização do canal
-|`qrcode`        | *string* | Hash necessário para a impressão do qrcode
+|`qrcode`        | *string* | token necessário para a impressão do qrcode
 |`channel:id`    | *int*    | *ID* do canal que está sendo consultado
 |`channel:name`  | *string* | Nome do canal que está sendo consultado
 |`channel:mobile`| *string* | Número do canal que está sendo consultado
@@ -1054,11 +1123,11 @@ Os dados são retornados num objeto em formato ***JSON***. Abaixo temos seus det
 ```
 
 <blockquote>
-<p><b>OBSERVAÇÃO:</b><br>O hash do qrcode é atualizado a cada <b>60 segundos</b>. Um hash desatualizado pode trazer um qrcode inválido e impossibilitando a correta sincronização do canal.</p>
+<p><b>OBSERVAÇÃO:</b><br>O token do qrcode é atualizado a cada <b>60 segundos</b>. Um token desatualizado pode trazer um qrcode inválido e impossibilitando a correta sincronização do canal.</p>
 </blockquote>
 
 <blockquote>
-<p><b>ATENÇÃO:</b><br>O hash no parâmetro qrcode é necessário para a impressão da imagem do qrcode. Sem ele não será possível realizar a sincronização do canal via API.</p>
+<p><b>ATENÇÃO:</b><br>O token no parâmetro qrcode é necessário para a impressão da imagem do qrcode. Sem ele não será possível realizar a sincronização do canal via API.</p>
 </blockquote>
 
 + Attributes
@@ -1088,15 +1157,39 @@ Os dados são retornados num objeto em formato ***JSON***. Abaixo temos seus det
           }
         }
 
+##Impressão do QRCode  [/v1/whatsapp/channels/qrcode/{tokenQrcode}]
+**Endpoint:** `https://api.smsfire.com.br/v1/whatsapp/channels/qrcode/{tokenQrcode}`
+
+###Testar impressão do qrcode [GET]
+
+Este serviço deverá ser utilizado após a captura do token do qrcode.
+Uma vez que o endpoint for requisitado e o token estiver correto, uma imagem *PNG* com o QRCode será impressa.
+
+<blockquote>
+<p><b>ATENÇÃO:</b><br>Se o aplicativo acusar que o QRCode é inválido, gere um novo token utilizando o serviço correspondente, imprima um novo Qrcode e tente novamente.</p>
+</blockquote>
+
++ parameters
+    + tokenQrcode: 37fa933d0a12363e7a8aaef65b0138f1 (string,required) - token do qrcode
+
+
++ request
+    + Header
+    
+            Authorization: Basic YWRtaW46YWRtaW4=
+            Content-Type: image/png
+
++ response 200 (image/png)
+
 ##Envio de mensagem ao aplicativo [/v1/whatsapp/send]
-**Endpoint:** `http://api.smsfire.com.br/v1/whatsapp/send`
+**Endpoint:** `https://api.smsfire.com.br/v1/whatsapp/send`
 
 ###Testar envio de mensagem [POST]
 Este serviço permite o envio de mensagem ao Whatsapp para um ou mais destinatários de forma imediata ou agendada com base no fuso horário do destinatário.
 
 Todos os dados parâmetros devem ser enviados via POST num objeto em ***JSON***.
 
-***Exemplo JSON completo***
+***Exemplo JSON completo - TEXTO***
 ```json
     {
         "token":"49ba5k13çp8xm?d0a976e1a14ea3af35",
@@ -1119,6 +1212,37 @@ Todos os dados parâmetros devem ser enviados via POST num objeto em ***JSON***.
                 "to":"011969157483",
                 "text":"Envio do texto 3",
                 "customId":"012345"
+            }
+        ]
+    }
+```
+
+***Exemplo JSON completo - IMAGEM***
+```json
+    {
+        "token":"49ba5k13çp8xm?d0a976e1a14ea3af35",
+        "messageType":"image",
+        "schedule":"2019-03-01 18:00:00",
+        "timezone":"America/Sao_Paulo",
+        "notificationUrl":"http://www.meusite.com.br/whatsapp_dlr.php",
+        "destinations":[
+            {
+                "to":"5511944556677",
+                "text":"Envio da legenda 1",
+                "customId":"123456",
+                "fileUrl":"https://i.imgur.com/9L6xi78.jpg"
+            },
+            {
+                "to":"5511966778899",
+                "text":"Envio da legenda 2 2",
+                "customId":"456789",
+                "fileUrl":"https://i.imgur.com/abcEda12.jpg"
+            },
+            {
+                "to":"011969157483",
+                "text":"Envio da legenda 3",
+                "customId":"012345",
+                "fileUrl":"https://i.imgur.com/2LkmW534.jpg"
             }
         ]
     }
@@ -1281,7 +1405,7 @@ Sabendo do objeto ***JSON*** recebido no callback, a tabela abaixo detalha os va
             }
 
 ##Consultar mensagens recebidas no aplicativo [/v1/whatsapp/inbox/{filter}]
-**Endpoint:** `http://api.smsfire.com.br/v1/whatsapp/inbox/{filter}`
+**Endpoint:** `https://api.smsfire.com.br/v1/whatsapp/inbox/{filter}`
 
 ###Testar consulta de mensagens [GET]
 Este serviço permite a consulta das mensagens recebidas no WhatsApp do número que está sincronizado na API ou Portal.
@@ -1370,6 +1494,312 @@ A consulta dá-se mediante uma requisição GET a partir da autenticação do se
                 "status": 1
             }
         ]
+        
+#Group Serviços da API BIGDATA
+A partir deste módulo, você será capaz de utilizar todas as funcionalidades dos nossos serviços de BIGDATA via API.
+##Consulta por pessoa [/v1/bigdata/person]
+**Endpoint:** `https://api.smsfire.com.br/v1/bigdata/person`
+
+###Testar consulta [POST]
+
+Este serviço permite a consulta de uma pessoa ao Bigdata com dados salvos ou atualizados.
+
+***Exemplo JSON simplificado***
+```json
+{
+    "doc":"0230270509"
+}
+```
+***Exemplo JSON completo***
+```json
+{
+    "doc":"0230270509",
+    "renew":false
+}
+```
+
+Logo que a requisição for bem sucedida, sem erros, nós teremos a resposta HTTP *202 - Accepted* para envios individuais com o seguinte objeto ***JSON*** como resposta
+
+***Callback JSON da requisição***
+
+```json
+{
+  "nome": "CLEOVALDO GERONICO SILVA",
+  "niver": "1955-05-28",
+  "sexo": "masc",
+  "doc": {
+    "num": "0230270509",
+    "status": "REGULAR"
+  },
+  "mae": "MARIA EMILIANA DA CRUZ E SILVA",
+  "falecido": "0",
+  "renda": "3000",
+  "ocupacao": "GERENTE FINANCEIRO",
+  "score": null,
+  "vinculo": [
+    {
+      "cpf_vinculo": "09273249423",
+      "nome_vinculo": "MARIA EMILIANA DA CRUZ E SILVA",
+      "tipo_vinculo": "MAE"
+    }
+  ],
+  "empresa": [
+    {
+      "name": "PADARIA ORAPOISPOIS LTDA",
+      "doc": "69569005000110",
+      "share": "99.00%",
+      "capital": 220000,
+      "date": "1966-07-20",
+      "status": "INAPTA"
+    }
+  ],
+  "celular": [
+    {
+      "ddd": 11,
+      "numero": "985685923",
+      "plus": true,
+      "ranking": 1,
+      "whatsapp": true
+    },
+    {
+      "ddd": 11,
+      "numero": "983194542",
+      "plus": true,
+      "ranking": 2,
+      "whatsapp": true
+    }
+  ],
+  "fixo": [
+    {
+      "ddd": 11,
+      "numero": "38982721",
+      "plus": true,
+      "ranking": 1,
+      "whatsapp": false
+    },
+    {
+      "ddd": 11,
+      "numero": "41522401",
+      "plus": false,
+      "ranking": 2,
+      "whatsapp": false
+    }
+  ],
+  "email": [
+    {
+      "email": "cleger@gmail.com",
+      "ranking": 3
+    },
+    {
+      "email": "gerosilv@gmail.com",
+      "ranking": 4
+    }
+  ],
+  "endereco": [
+    {
+      "endereco": "R FUNCHAL 418 29 A",
+      "bairro": "VL OLIMPIA",
+      "cidade": "SAO PAULO",
+      "uf": "SP",
+      "cep": "04551060",
+      "tipo": "residencial",
+      "ranking": 1
+    },
+    {
+      "endereco": "R FUNCHAL 418 AND 8",
+      "bairro": "VL OLIMPIA",
+      "cidade": "SAO PAULO",
+      "uf": "SP",
+      "cep": "04551060",
+      "tipo": "comercial",
+      "ranking": 2
+    }
+  ],
+  "veiculo": [
+    {
+      "placa": "6DN8720",
+      "marca": "HONDA\/FIT LX",
+      "ano_fabricacao": 2005,
+      "ano_modelo": 2006,
+      "renavan": "869483300",
+      "chassi": "92HLD17406ZZ07244",
+      "data_licenciamento": "2009-12-23T00:00:00-02:00",
+      "ranking": 1
+    },
+    {
+      "placa": "CBG9323",
+      "marca": "I\/HONDA ACCORD EXR",
+      "ano_fabricacao": 1999,
+      "ano_modelo": 1999,
+      "renavan": "726190441",
+      "chassi": "1HGCG2350XA590122",
+      "data_licenciamento": "2009-03-10T00:00:00-03:00",
+      "ranking": 2
+    }
+  ]
+}
+```
+Sabendo do objeto ***JSON*** recebido no callback, a tabela abaixo detalha os valores de cada um dos parâmetros.
+
+| Nome     | Tipo     | Descrição
+|----------|:--------:|-----------
+|`nome`    | *string* | Nome completo da pessoa
+|`niver`   | *date*   | Data de nascimento
+|`sexo`    | *string* | Sexo da pessoa
+|`doc`     | *array*  | Número e situação do documento
+|`mae`     | *string* | Nome completo da mãe
+|`falecido`| *boolean*| Indica se pessoa consta como falecida ou não
+|`renda`   | *float*  | Renda estimada
+|`ocupacao`| *string* | Ocupação identificada
+|`risco`   | *string* | Risco de fornecer crédito
+|`vinculo` | *array*  | Conjunto de pessoas vinculadas
+|`empresa` | *array*  | Conjunto de empresas que possui ou é sócio/administrador
+|`celular` | *array*  | Conjunto de números móveis identificados em ordem de *chance de contatar*
+|`fixo`    | *array*  | Conjunto de números fixos identificados em ordem de *chance de contatar*
+|`email`   | *array*  | Conjunto de e-mails identificados em ordem de *chance de contatar*
+|`endereco`| *array*  | Conjunto de endereçços residenciais e comerciais identificados em ordem de *chance de contatar*
+|`veiculo` | *array*  | Conjunto de veículos registrados em nome da pessoa consultada
+
+<blockquote>
+<p><b>OBSERVAÇÃO:</b><br>
+Quando um valor não estiver disponível ele será preenchido com o valor NULL. Se um array (coleção) não contiver nenhum item, o campo conterá um array vazio.
+</p>
+</blockquote>
+
++ Attributes
+    + doc: "0230270509" (string, required) - documento da pessoa a ser consultada
+    + renew: true (boolean, required) - Indicador para renovar a consulta.
+    
++ request (application/json)
+    + Header
+    
+            Authorization: Basic YWRtaW46YWRtaW4=
+    
+    + Body
+    
+            {
+            "doc":"0230270509",
+            "renew":true
+            }
+
++ Response 207 (application/json)
+
+        {
+          "nome": "CLEOVALDO GERONICO SILVA",
+          "niver": "1955-05-28",
+          "sexo": "masc",
+          "doc": {
+            "num": "0230270509",
+            "status": "REGULAR"
+          },
+          "mae": "MARIA EMILIANA DA CRUZ E SILVA",
+          "falecido": "0",
+          "renda": "3000",
+          "ocupacao": "GERENTE FINANCEIRO",
+          "score": null,
+          "vinculo": [
+            {
+              "cpf_vinculo": "09273249423",
+              "nome_vinculo": "MARIA EMILIANA DA CRUZ E SILVA",
+              "tipo_vinculo": "MAE"
+            }
+          ],
+          "empresa": [
+            {
+              "name": "PADARIA ORAPOISPOIS LTDA",
+              "doc": "69569005000110",
+              "share": "99.00%",
+              "capital": 220000,
+              "date": "1966-07-20",
+              "status": "INAPTA"
+            }
+          ],
+          "celular": [
+            {
+              "ddd": 11,
+              "numero": "985685923",
+              "plus": true,
+              "ranking": 1,
+              "whatsapp": true
+            },
+            {
+              "ddd": 11,
+              "numero": "983194542",
+              "plus": true,
+              "ranking": 2,
+              "whatsapp": true
+            }
+          ],
+          "fixo": [
+            {
+              "ddd": 11,
+              "numero": "38982721",
+              "plus": true,
+              "ranking": 1,
+              "whatsapp": false
+            },
+            {
+              "ddd": 11,
+              "numero": "41522401",
+              "plus": false,
+              "ranking": 2,
+              "whatsapp": false
+            }
+          ],
+          "email": [
+            {
+              "email": "cleger@gmail.com",
+              "ranking": 3
+            },
+            {
+              "email": "gerosilv@gmail.com",
+              "ranking": 4
+            }
+          ],
+          "endereco": [
+            {
+              "endereco": "R FUNCHAL 418 29 A",
+              "bairro": "VL OLIMPIA",
+              "cidade": "SAO PAULO",
+              "uf": "SP",
+              "cep": "04551060",
+              "tipo": "residencial",
+              "ranking": 1
+            },
+            {
+              "endereco": "R FUNCHAL 418 AND 8",
+              "bairro": "VL OLIMPIA",
+              "cidade": "SAO PAULO",
+              "uf": "SP",
+              "cep": "04551060",
+              "tipo": "comercial",
+              "ranking": 2
+            }
+          ],
+          "veiculo": [
+            {
+              "placa": "6DN8720",
+              "marca": "HONDA\/FIT LX",
+              "ano_fabricacao": 2005,
+              "ano_modelo": 2006,
+              "renavan": "869483300",
+              "chassi": "92HLD17406ZZ07244",
+              "data_licenciamento": "2009-12-23T00:00:00-02:00",
+              "ranking": 1
+            },
+            {
+              "placa": "CBG9323",
+              "marca": "I\/HONDA ACCORD EXR",
+              "ano_fabricacao": 1999,
+              "ano_modelo": 1999,
+              "renavan": "726190441",
+              "chassi": "1HGCG2350XA590122",
+              "data_licenciamento": "2009-03-10T00:00:00-03:00",
+              "ranking": 2
+            }
+          ]
+        }
+
 
 #Group Suporte técnico
 A todos os nossos clientes oferecemos suporte técnico em horário comercial das 9:00h as 18:00h de segunda a sexta.
